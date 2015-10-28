@@ -23,7 +23,7 @@ if (1 == system.args[3]) {
 } else if (3 == system.args[3]) {
     page.viewportSize = {width: 800, height: 1000};
 } else if (4 == system.args[3]) {
-    page.viewportSize = {width: 1024, height: 1024};
+    page.viewportSize = {width: 1000, height: 1000};
 } else {
     page.viewportSize = {width: 2560, height: 1600};
 }
@@ -87,7 +87,6 @@ var _isEnd = function() {
         if (footers.length > 0) {
             var last = footers[footers.length - 1];
             var texts = $(last).text().split('/');
-            console.log($(last).text())
             if (2 == texts.length) {
                 return texts[0] == texts[1];
             }
@@ -95,6 +94,14 @@ var _isEnd = function() {
 
         return false;
     });
+};
+
+var _getProgress = function() {
+	var prog = page.evaluate(function() {
+		return $('.left').text()
+	});
+	
+	console.log('progress, '+prog)
 };
 
 var _nextPage = function() {
@@ -114,16 +121,7 @@ var _setClipRect = function(page) {
         width: rect.width,
         height: rect.height
     };
-
-    console.log('T:'+rect.top+',L:'+rect.left+',W:'+rect.width+',H:'+rect.height);
-};
-
-var _getProgress = function(page) {
-    var prog = page.evaluate(function() {
-        return $('.left').text()
-    });
-
-    console.log(prog);
+    // console.log('T:'+rect.top+',L:'+rect.left+',W:'+rect.width+',H:'+rect.height);
 };
 
 var _setPaperSize = function(page) {
@@ -144,9 +142,9 @@ var _renderBook = function() {
             var fileName = FOLDER + '/' + pageNum + '.pdf';
             _setClipRect(page);
             page.render(fileName);
-            console.log(fileName);
+            //console.log(fileName);
 
-            _getProgress(page);
+            _getProgress()
 
             if (_isEnd()) {
                 clearInterval(timer);

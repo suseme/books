@@ -7,7 +7,7 @@ class DuokanPrintWnd(wx.Frame):
 		
 		panel = wx.Panel(self)
 		
-		types = ['2x2','1x2']
+		types = ['2x2','2x2_d','1x2']
 		
 		lblTypes=wx.StaticText(panel, -1, "Types: ", style=1)
 		self.cbTypes = wx.ComboBox(panel, -1, types[0], (15, 30), wx.DefaultSize, types, wx.CB_DROPDOWN)
@@ -44,6 +44,8 @@ class DuokanPrintWnd(wx.Frame):
 		types = self.cbTypes.GetSelection()
 		pages = string.atoi(self.tePages.GetValue())
 		if types == 1:
+			self.prnt2_2_dir(pages)
+		elif type == 2:
 			self.prnt1_2(pages)
 		else:
 			self.prnt2_2(pages)
@@ -77,18 +79,47 @@ class DuokanPrintWnd(wx.Frame):
 			else:
 				sys.stdout.write('%d,' % pages)
 
+	def prnt2_2_dir(self, pages):
+		max = ((pages + 7) / 8) * 8
+		for i in range(1, max + 1):
+			page = 1
+			if i % 8 == 1:
+				page = i + 5
+			elif i % 8 == 2:
+				page = i - 1
+			elif i % 8 == 3:
+				page = i - 1
+			elif i % 8 == 4:
+				page = i + 1
+			elif i % 8 == 5:
+				page = i + 3
+			elif i % 8 == 6:
+				page = i - 3
+			elif i % 8 == 7:
+				page = i - 3
+			elif i % 8 == 0:
+				page = i - 1
+			else:
+				print 'error...'
+				break
+
+			if page < pages:
+				sys.stdout.write('%d,' % page)
+			else:
+				sys.stdout.write('%d,' % pages)
+
 	def prnt1_2(self, pages):
 		max = ((pages + 3) / 4) * 4
 		for i in range(1, max + 1):
 			page = 1
 			if i % 4 == 1:
-				page = i + 3
+				page = i
 			elif i % 4 == 2:
-				page = i - 1
+				page = i + 1
 			elif i % 4 == 3:
 				page = i - 1
 			elif i % 4 == 0:
-				page = i - 1
+				page = i
 			else:
 				print 'error...'
 				break

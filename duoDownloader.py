@@ -4,33 +4,43 @@
 import sys
 import os
 import wx
-import subprocess
-import threading
 import time
+from spider import Commading
+from duoPersist import Persist
 
-class Logging(threading.Thread):
-	def __init__(self):
-		threading.Thread.__init__(self)
-		self.running = True
-		print 'Logging...'
+class Downloader(Commading):
+	EVT_LOG = 11
+	EVT_PROG = 12
+	EVT_START = Commading.ON_START
+	EVT_STOP = 14
+	def __init__(self, bid, name):
+		cmd = ["duokan.bat", bid, name]
+		Commading.__init__(self, cmd)
+		self.init([Downloader.EVT_LOG, Downloader.EVT_PROG, Downloader.EVT_START, Downloader.EVT_STOP])
+		self.bind(Commading.ON_LOG, self.onLog)
+		self.bind(Commading.ON_STOP, self.onStop)
+		self.persist = Persist()
+		self.id = bid
 
-	def setPip(self, pip):
-		self.pip = pip
+	def onStop(self, event):
+		self.persist.setDownload(self.id)
+		self.dispatch(event, Downloader.EVT_STOP)
 
-	def run(self):
-		while self.running:
-			buff = self.pip.stdout.readline()
-			if buff == '' and self.pip.poll() != None:
-				break
-			print buff
-		print 'Logging stop...'
+	def onLog(self, event, str):
+		# self.hdl.cbLog(str)
+		self.dispatch(Downloader.EVT_LOG, str)
+		prefix = 'progress, '
+		if str.startswith(prefix):
+			str = str[len(prefix):]
+			str = str.lstrip('\n').lstrip('\r')
+			str = str.split('/')
+			prog = int(str[0]) * 100 / int(str[1])
+			# self.hdl.cbProgress(prog)
+			self.dispatch(Downloader.EVT_PROG, prog)
 
-	def stop(self):
-		self.running = False
-			
 class DuokanDownloaderWnd(wx.Frame):
-	def __init__(self, tt):
-		wx.Frame.__init__(self, None, title=tt, size=(640,250))
+	def __init__(self, tt=''):
+		wx.Frame.__init__(self, None, title=tt, size=(640, 170))
 
 		panel = wx.Panel(self)
 
@@ -57,7 +67,6 @@ class DuokanDownloaderWnd(wx.Frame):
 		hbox.Add(self.btnStop, proportion=0, flag=wx.LEFT, border=5)
 
 		self.teInfo = wx.TextCtrl(panel, style=wx.TE_MULTILINE | wx.HSCROLL)
-
 		self.gauge = wx.Gauge(panel, -1, 100, style = wx.GA_PROGRESSBAR)
 
 		vbox = wx.BoxSizer(wx.VERTICAL)
@@ -67,61 +76,58 @@ class DuokanDownloaderWnd(wx.Frame):
 
 		panel.SetSizer(vbox)
 
-		self.redir = RedirectText(self)
-		sys.stdout = self.redir
-
-	def add_log(self, log):
-		self.teInfo.AppendText(log)
+	def OnExit(self, event):
+		self.stop(event)
+		self.Close(True)
 
 	def OnKeyDown(self, event):
 		self.start(event)
 
 	def start(self, event):
-		self.gauge.SetValue(10);
+		self.gauge.SetValue(10)
 		self.teInfo.Clear()
 
 		bid = str(self.teId.GetValue())
 		name = str(self.teName.GetValue())
-		print 'ID: %s' % bid
-		print 'Name: %s' % name
-		
-		cmd = ["duokan.bat", bid, name]
+		self.addLog('ID: %s\n' % bid)
+		self.addLog('Name: %s\n' % name)
 
-		print 'downloading...'
-		print '---------'
-		self.pip = subprocess.Popen(cmd, bufsize=0, stdout=subprocess.PIPE)
+		self.addLog('downloading...\n')
+		self.addLog('---------\n')
 
-		self.logging = Logging()
-		self.logging.setPip(self.pip)
-		self.logging.start()
+		self.downloader = Downloader(bid, name)
+		self.downloader.bind(Downloader.ON_STOP, self.cbStop)
+		self.downloader.bind(Downloader.EVT_LOG, self.cbLog)
+		self.downloader.bind(Downloader.EVT_PROG, self.cbProgress)
+		self.downloader.start()
 
-		self.gauge.SetValue(100);
-
+		# self.gauge.SetValue(100);
+	
 		self.btnDownload.Disable()
 		self.btnStop.Enable()
 
 	def stop(self, event):
-		self.logging.stop()
-		self.pip.kill()
+		self.downloader.stop()
 		self.btnDownload.Enable()
 		self.btnStop.Disable()
+		
+	def addLog(self, log):
+		self.teInfo.AppendText(log)
+
+	def cbStop(self, event):
+		wx.CallAfter(self.gauge.SetValue, 100)
+
+	def cbLog(self, event, str):
+		wx.CallAfter(self.addLog, str)
+
+	def cbProgress(self, event, prog):
+		wx.CallAfter(self.gauge.SetValue, prog)
 		
 	def setId(self, id):
 		self.teId.SetValue(id)
 		
 	def setName(self, name):
 		self.teName.SetValue(name)
-		
-class RedirectText:
-	def __init__(self, wnd):
-		self.wnd=wnd
-
-	def write(self, string):
-		# self.wnd.AppendText("%s" % string.decode("UTF-8"))
-		# self.wnd.WriteText("%s" % string.decode("UTF-8"))
-		# wx.CallAfter(self.wnd.add_log, "%s" % string.decode("UTF-8"))
-		wx.CallAfter(self.wnd.add_log, string)
-		# self.wnd.add_log(string)
 
 if __name__ == '__main__':
 	app = wx.App(0)
