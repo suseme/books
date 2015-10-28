@@ -29,6 +29,7 @@ class MainWindow(wx.Frame):
     MENU_DOWNLOAD_ALL = 3
     MENU_CLEAN_ALL = 4
     MENU_RENAME_ALL = 5
+    MENU_PRINT_CROP = 7
 
     def __init__(self, tt):
         self.duokan = Duokan()
@@ -50,6 +51,7 @@ class MainWindow(wx.Frame):
         menuEdit = wx.Menu()
         menuEdit.Append(MainWindow.MENU_CLEAN_ALL,"&Clean tmp folder")
         menuEdit.Append(MainWindow.MENU_RENAME_ALL,"&Rename all")
+        menuEdit.Append(MainWindow.MENU_PRINT_CROP, '&Crop for printing')
 
         # create menubar and add item
         menuBar = wx.MenuBar()
@@ -66,6 +68,7 @@ class MainWindow(wx.Frame):
         self.Bind(wx.EVT_MENU, self.onDownload, id=MainWindow.MENU_DOWNLOAD_ALL)
         self.Bind(wx.EVT_MENU, self.onClean, id=MainWindow.MENU_CLEAN_ALL)
         self.Bind(wx.EVT_MENU, self.onRenameAll, id=MainWindow.MENU_RENAME_ALL)
+        self.Bind(wx.EVT_MENU, self.onCropForPrint, id=MainWindow.MENU_PRINT_CROP)
 
         #panel######################################
         panel = wx.Panel(self)
@@ -205,6 +208,26 @@ class MainWindow(wx.Frame):
             newName =  '%s%s' % (title, extname)
             os.rename(os.path.join(path, item), os.path.join(path, newName))
 
+    def onCropForPrint(self, event):
+        file_wildcard = "Pdf files(*.pdf)|*.pdf"
+        dlg = wx.FileDialog(self,
+                            'Open file to crop for printing',
+                            os.path.join(os.getcwd(), 'books'),
+                            style = wx.OPEN,
+                            wildcard = file_wildcard
+                            )
+        if dlg.ShowModal() == wx.ID_OK:
+            filePath = dlg.GetPath()
+            print filePath
+            self.duokan.cropForPrint(filePath)
+            retDlg = wx.MessageDialog(self,
+                                    'Finished!',
+                                    'Crop for printing',
+                                    wx.OK)
+            retDlg.ShowModal()
+            retDlg.Destroy()
+        dlg.Destroy()
+
     # download a book
     def onDownloadItem(self,event):
         idx = self.list.GetFocusedItem()
@@ -319,6 +342,9 @@ class Duokan:
         duopdf.cropWH(destFile, 500, 666)
         os.remove(srcFile)
         os.rename(destFile, srcFile)
+
+    def cropForPrint(self, src):
+        DuoPdf.duoCropForPrint(src)
 
     def rename(self, id, title):
         path = os.path.join(os.path.curdir, 'books', 'new', id+'.pdf')
