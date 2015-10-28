@@ -24,7 +24,7 @@ class Downloader(Commading):
 
 	def onStop(self, event):
 		self.persist.setDownload(self.id)
-		self.dispatch(event, Downloader.EVT_STOP)
+		self.dispatch(Downloader.EVT_STOP)
 
 	def onLog(self, event, str):
 		# self.hdl.cbLog(str)

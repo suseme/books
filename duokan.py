@@ -5,7 +5,7 @@ import sys
 import os
 import wx
 import webbrowser
-from duospider import DuokanSpecial
+from duoSpider import DuokanSpecial
 from duoDownloader import DuokanDownloaderWnd, Downloader
 from duoPersist import Persist
 from duoPdf import DuoPdf
