@@ -9,24 +9,24 @@ from spider import Spider, Callbacks
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-class DuokanSpecial(Callbacks):
+class Special(Callbacks):
 	siteRoot = 'http://www.duokan.com'
 
-	ON_FIND_LINK = 1
-	ON_FIND_BOOK = 2
+	(EVT_FIND_LINK, EVT_FIND_BOOK) = range(0, 2)
 
-	def __init__(self):
+	def __init__(self, proxyHost='', proxyAuthUser='', proxyAuthPswd=''):
 		Callbacks.__init__(self)
-		self.init([DuokanSpecial.ON_FIND_LINK, DuokanSpecial.ON_FIND_BOOK])
+		self.init([Special.EVT_FIND_LINK, Special.EVT_FIND_BOOK])
 		self.titles = {}
 		self.links = {}
 		self.authors = {}
 
 		self.callbacks = {'http://www.duokan.com/special':self.findBooks, 'http://www.duokan.com/book':self.findBook, 'http://www.duokan.com':self.findLinks}
 		self.spider = Spider('Duokan Special')
-		self.spider.set_proxy('proxy-apac.delphiauto.net:8080', 'rzfwch', '4rfvcde3')
+		if len(proxyHost) > 0:
+			self.spider.set_proxy(proxyHost, proxyAuthUser, proxyAuthPswd)
 		self.spider.add_callbacks(self.callbacks)
-		self.spider.add_urls([DuokanSpecial.siteRoot])
+		self.spider.add_urls([Special.siteRoot])
 
 	def findLinks(self, url, response):
 		self.soup = BeautifulSoup(response, from_encoding='utf8')
@@ -36,12 +36,12 @@ class DuokanSpecial(Callbacks):
 			links = list_node.findAll('a')
 			# limit free read
 			link = links[0]
-			link = [DuokanSpecial.siteRoot + link['href']]
+			link = [Special.siteRoot + link['href']]
 			self.spider.add_urls(link)
-			self.dispatch(DuokanSpecial.ON_FIND_LINK, link[0])
+			self.dispatch(Special.EVT_FIND_LINK, link[0])
 			# limit free buy
 			link = links[2]
-			link = [DuokanSpecial.siteRoot + link['href']]
+			link = [Special.siteRoot + link['href']]
 			self.spider.add_urls(link)
 
 	def findBooks(self, url, response):
@@ -54,9 +54,9 @@ class DuokanSpecial(Callbacks):
 				link = item.find('a', attrs={'class':'title'})['href']
 				author = item.find('div', attrs={'class':'u-author'}).find('span').string
 				self.titles[id] = title
-				self.links[id] = DuokanSpecial.siteRoot + link
+				self.links[id] = Special.siteRoot + link
 				self.authors[id] = author
-				self.dispatch(DuokanSpecial.ON_FIND_BOOK, id, self.titles[id], self.authors[id], self.links[id])
+				self.dispatch(Special.EVT_FIND_BOOK, id, self.titles[id], self.authors[id], self.links[id])
 		return self.titles
 
 	def findBook(self, url, response):
@@ -101,8 +101,8 @@ class DuokanSpecial(Callbacks):
 					id = dk_data['book']['id']
 					title = dk_data['book']['title']
 					author = dk_data['book']['authors']
-					link = DuokanSpecial.siteRoot + dk_data['book']['url']
-					self.dispatch(DuokanSpecial.ON_FIND_BOOK, id, title, author, link)
+					link = Special.siteRoot + dk_data['book']['url']
+					self.dispatch(Special.EVT_FIND_BOOK, id, title, author, link)
 
 	def start(self):
 		self.spider.start()
@@ -117,6 +117,6 @@ class DuokanSpecial(Callbacks):
 		return self.authors
 
 if __name__ == "__main__":
-	special = DuokanSpecial()
+	special = Special()
 	special.start()
 

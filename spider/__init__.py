@@ -13,16 +13,13 @@ def get_timestamp():
 	return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 class Fetch:
-	auth = "%s:%s" % ("rzfwch", "3edczaq1")
-	proxy_server = "proxy-amer.delphiauto.net:8080"
-	proxy_config = "http://%s@%s" % (auth, proxy_server)
-		
 	def __init__(self):
 		self.use_proxy = False;
 	
-	def set_proxy(self, server, usr, passwd):
+	def set_proxy(self, server, usr='', passwd=''):
 		self.use_proxy = True;
 		self.proxy_config = "http://%s:%s@%s" % (usr, passwd, server)
+		print 'using proxy: %s' % (self.proxy_config)
 
 	def get(self, url):
 		print '<%s GET %s>' % (get_timestamp(), url)
@@ -62,7 +59,7 @@ class Spider():
 		print name
 		self.fetch = Fetch()
 		
-	def set_proxy(self, server, usr, passwd):
+	def set_proxy(self, server, usr='', passwd=''):
 		self.fetch.set_proxy(server, usr, passwd)
 
 	def start(self):
