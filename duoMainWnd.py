@@ -1,15 +1,17 @@
 #!/usr/bin/python
 # coding=utf8
 
+__author__ = 'vin@misday.com'
+
 import os
 import wx
 from duoSpider import Special
 from duoMain import Duokan, Downloader
 
 class MainWindow(wx.Frame):
-    PROXY_HOST = 'proxy-apac.delphiauto.net:8080'
-    PROXY_AUTH_USER = 'rzfwch'
-    PROXY_AUTH_PSWD = '4rfvcde3'
+    PROXY_HOST = ''
+    PROXY_AUTH_USER = ''
+    PROXY_AUTH_PSWD = ''
     PROXY_AUTH = '%s:%s' % (PROXY_AUTH_USER, PROXY_AUTH_PSWD)
 
     BG_FREED = wx.Colour(255, 255, 153)

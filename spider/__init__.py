@@ -1,3 +1,4 @@
+__author__ = 'vin@misday.com'
 
 import os, sys, urllib, codecs
 from datetime import *

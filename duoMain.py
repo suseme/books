@@ -1,4 +1,4 @@
-__author__ = 'rzfwch'
+__author__ = 'vin@misday.com'
 
 import os, webbrowser
 from spider import Callbacks, Commading
@@ -106,11 +106,7 @@ class Downloader(Commading):
     EVT_STOP = 14
 
     def __init__(self, bid, name, proxyHost='', proxyAuthUser='', proxyAuthPswd=''):
-        '''phantomjs --proxy=proxy-apac.delphiauto.net:8080 --proxy-auth=rzfwch:4rfvcde3 duokan.js %1 %ddd%/%2 4'''
-
-        # cmd = ["duokan.bat", bid, name]
-        #cmd = ['phantomjs', '--proxy=%s' % (Downloader.PROXY_HOST, ), '--proxy-auth=%s' % (Downloader.PROXY_AUTH, ), 'duokan.js', bid, 'tmp/%s' % (name, ), '4']
-
+        '''phantomjs --proxy=host --proxy-auth=username:password duokan.js %1 %ddd%/%2 4'''
         cmd = ['phantomjs',]
         if len(proxyHost) > 0:
             cmd.append('--proxy=%s' % (proxyHost, ))

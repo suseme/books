@@ -1,4 +1,4 @@
-__author__ = 'Vincent'
+__author__ = 'vin@misday.com'
 
 import sqlite3
 

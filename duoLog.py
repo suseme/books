@@ -1,4 +1,4 @@
-__author__ = 'rzfwch'
+__author__ = 'vin@misday.com'
 
 from spider import Callbacks
 

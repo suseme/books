@@ -1,4 +1,6 @@
 
+__author__ = 'vin@misday.com'
+
 import sys, os
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
 from duoLog import Log

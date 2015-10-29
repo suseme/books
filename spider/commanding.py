@@ -1,4 +1,4 @@
-__author__ = 'vince'
+__author__ = 'vin@misday.com'
 
 import threading
 import subprocess

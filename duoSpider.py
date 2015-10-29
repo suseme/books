@@ -1,4 +1,4 @@
-﻿# # # #!/usr/bin/python
+﻿__author__ = 'vin@misday.com'
 
 import sys, re, os, wx
 from datetime import *
