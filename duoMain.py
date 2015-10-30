@@ -86,12 +86,27 @@ class Duokan:
         os.rename(destPath, srcPath)
 
     @staticmethod
-    def cropForPrint(src):
+    def cropSingle(src):
+        '''crop pdf file'''
+        srcPath, ext = os.path.splitext(src)
+        destPath = srcPath + '_c' + ext
+        DuoPdf.cropWH(destPath, src, 500, 666)
+
+    @staticmethod
+    def crop4Print(src):
         '''crop blank edge except first page'''
         srcPath, ext = os.path.splitext(src)
-        destPath = srcPath + '.print' + ext
+        destPath = srcPath + '_p' + ext
         # print destPath
         DuoPdf.crop2(destPath, src, (0, 12, 48, 12), (48, 12, 0, 12))
+
+    @staticmethod
+    def crop4Kindle(src):
+        '''crop blank edge'''
+        srcPath, ext = os.path.splitext(src)
+        destPath = srcPath + '_k' + ext
+        # print destPath
+        DuoPdf.crop(destPath, src, 50, 12, 50, 12)
 
     def addBook(self, id, title, author, link):
         return self.persist.addBook(id, title, author, link)
@@ -127,9 +142,12 @@ class Downloader(Commading):
         self.id = bid
 
     def onStop(self, event):
+        Log.i('phantomjs finished...')
         self.persist.setDownload(self.id)
         Duokan.merge(self.id)
+        Log.i('merged pdf...')
         Duokan.crop(self.id)
+        Log.i('croped pdf...')
         self.dispatch(Downloader.EVT_STOP)
 
     def onLog(self, event, str):
@@ -143,5 +161,3 @@ class Downloader(Commading):
             prog = int(str[0]) * 100 / int(str[1])
             # self.hdl.cbProgress(prog)
             self.dispatch(Downloader.EVT_PROG, prog)
-
-

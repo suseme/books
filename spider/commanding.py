@@ -18,14 +18,19 @@ class Commading(threading.Thread, Callbacks):
 		self.init([Commading.ON_START, Commading.ON_STOP, Commading.ON_LOG])
 
 	def run(self):
+		print '%s starting...' % (self.cmd[0])
 		self.dispatch(Commading.ON_START)
-		self.pip = subprocess.Popen(self.cmd, bufsize=0, stdout=subprocess.PIPE)
+		try:
+			self.pip = subprocess.Popen(self.cmd, bufsize=0, stdout=subprocess.PIPE)
 
-		while self.running:
-			buf = self.pip.stdout.readline()
-			if buf == '' and self.pip.poll() != None:
-				break
-			self.dispatch(Commading.ON_LOG, buf)
+			while self.running:
+				buf = self.pip.stdout.readline()
+				if buf == '' and self.pip.poll() != None:
+					break
+				self.dispatch(Commading.ON_LOG, buf)
+		except:
+			print 'run [%s] failed...' % (self.cmd[0])
+		print '%s finished...' % (self.cmd[0])
 		self.dispatch(Commading.ON_STOP)
 		self.running = False
 

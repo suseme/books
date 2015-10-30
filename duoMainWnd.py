@@ -22,12 +22,12 @@ class MainWindow(wx.Frame):
     COLUMNS_WIDTH = [50, 200, 200, 200, 200, 100]
 
     MENUITEMS = ['&Fetch', '&Download all', '&Open in brower', '&Open download folder',
-                 '&Clean tmp folder', '&Rename all', '&Crop for printing',
+                 '&Clean tmp folder', '&Rename all', '&Crop', 'Crop for &printing', 'Crop for &kindle',
                  'Download', 'View in browser', 'Remove', 'Merge', 'Crop', 'Rename']
     (ID_MENUITEM_FETCH, ID_MENUITEM_DOWNLOAD_ALL, ID_MENUITEM_OPEN_IN_BROWER, ID_MENUITEM_OPEN_NEW,
-     ID_MENUITEM_CLEAN_ALL, ID_MENUITEM_RENAME_ALL, ID_MENUITEM_PRINT_CROP,
+     ID_MENUITEM_CLEAN_ALL, ID_MENUITEM_RENAME_ALL, ID_MENUITEM_CROP_SINGLE, ID_MENUITEM_CROP_4_PRINT, ID_MENUITEM_CROP_4_KINDLE,
      ID_MENUITEM_DOWN, ID_MENUITEM_VIEW, ID_MENUITEM_REMOVE, ID_MENUITEM_MERGE, ID_MENUITEM_CROP, ID_MENUITEM_RENAME,
-     ID_BTN_FETCH, ID_BTN_OPEN, ID_BTN_DOWN, ID_LIST) = range(0, 17)
+     ID_BTN_FETCH, ID_BTN_OPEN, ID_BTN_DOWN, ID_LIST) = range(0, 19)
 
     def __init__(self, tt):
         self.duokan = Duokan()
@@ -39,17 +39,20 @@ class MainWindow(wx.Frame):
         menuFile = wx.Menu()
 
         # add  menu item
-        menuFile.Append(MainWindow.ID_MENUITEM_FETCH, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_FETCH])
-        menuFile.Append(MainWindow.ID_MENUITEM_DOWNLOAD_ALL, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_DOWNLOAD_ALL])
+        menuFile.Append(MainWindow.ID_MENUITEM_FETCH,           MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_FETCH])
+        menuFile.Append(MainWindow.ID_MENUITEM_DOWNLOAD_ALL,    MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_DOWNLOAD_ALL])
         menuFile.AppendSeparator()
-        menuFile.Append(MainWindow.ID_MENUITEM_OPEN_IN_BROWER, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_OPEN_IN_BROWER])
-        menuFile.Append(MainWindow.ID_MENUITEM_OPEN_NEW, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_OPEN_NEW])
+        menuFile.Append(MainWindow.ID_MENUITEM_OPEN_IN_BROWER,  MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_OPEN_IN_BROWER])
+        menuFile.Append(MainWindow.ID_MENUITEM_OPEN_NEW,        MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_OPEN_NEW])
 
         # create a menu
         menuEdit = wx.Menu()
-        menuEdit.Append(MainWindow.ID_MENUITEM_CLEAN_ALL,  MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CLEAN_ALL])
-        menuEdit.Append(MainWindow.ID_MENUITEM_RENAME_ALL, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_RENAME_ALL])
-        menuEdit.Append(MainWindow.ID_MENUITEM_PRINT_CROP, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_PRINT_CROP])
+        menuEdit.Append(MainWindow.ID_MENUITEM_CLEAN_ALL,     MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CLEAN_ALL])
+        menuEdit.Append(MainWindow.ID_MENUITEM_RENAME_ALL,    MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_RENAME_ALL])
+        menuEdit.AppendSeparator()
+        menuEdit.Append(MainWindow.ID_MENUITEM_CROP_SINGLE,   MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CROP_SINGLE])
+        menuEdit.Append(MainWindow.ID_MENUITEM_CROP_4_PRINT,  MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CROP_4_PRINT])
+        menuEdit.Append(MainWindow.ID_MENUITEM_CROP_4_KINDLE, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CROP_4_KINDLE])
 
         # create menubar and add item
         menuBar = wx.MenuBar()
@@ -75,9 +78,9 @@ class MainWindow(wx.Frame):
         lblUrl=wx.StaticText(panel, -1, "Special URL: ", style=1)
         self.teUrl = wx.TextCtrl(panel, style=wx.TE_PROCESS_ENTER)
 
-        btnUpdate = wx.BitmapButton(panel, MainWindow.ID_BTN_FETCH, wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_BUTTON, tsize))
-        btnBrowser = wx.BitmapButton(panel, MainWindow.ID_BTN_OPEN, wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_BUTTON, tsize))
-        btnDownload = wx.BitmapButton(panel, MainWindow.ID_BTN_DOWN, wx.ArtProvider.GetBitmap(wx.ART_GO_DOWN, wx.ART_BUTTON, tsize))
+        btnUpdate = wx.BitmapButton(panel, MainWindow.ID_BTN_FETCH,     wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_BUTTON, tsize))
+        btnBrowser = wx.BitmapButton(panel, MainWindow.ID_BTN_OPEN,     wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_BUTTON, tsize))
+        btnDownload = wx.BitmapButton(panel, MainWindow.ID_BTN_DOWN,    wx.ArtProvider.GetBitmap(wx.ART_GO_DOWN, wx.ART_BUTTON, tsize))
 
         hbox = wx.BoxSizer()
         hbox.Add(btnUpdate, proportion=0, flag=wx.RIGHT, border=5)
@@ -101,28 +104,30 @@ class MainWindow(wx.Frame):
 
         panel.SetSizer(vbox)
 
-        self.Bind(wx.EVT_MENU, self.onUpdate, id=MainWindow.ID_MENUITEM_FETCH)
-        self.Bind(wx.EVT_MENU, self.onBrowser, id=MainWindow.ID_MENUITEM_OPEN_IN_BROWER)
-        self.Bind(wx.EVT_MENU, self.onBrowserNew, id=MainWindow.ID_MENUITEM_OPEN_NEW)
-        self.Bind(wx.EVT_MENU, self.onDownload, id=MainWindow.ID_MENUITEM_DOWNLOAD_ALL)
+        self.Bind(wx.EVT_MENU, self.onUpdate,       id=MainWindow.ID_MENUITEM_FETCH)
+        self.Bind(wx.EVT_MENU, self.onBrowser,      id=MainWindow.ID_MENUITEM_OPEN_IN_BROWER)
+        self.Bind(wx.EVT_MENU, self.onBrowserNew,   id=MainWindow.ID_MENUITEM_OPEN_NEW)
+        self.Bind(wx.EVT_MENU, self.onDownload,     id=MainWindow.ID_MENUITEM_DOWNLOAD_ALL)
 
-        self.Bind(wx.EVT_MENU, self.onClean, id=MainWindow.ID_MENUITEM_CLEAN_ALL)
-        self.Bind(wx.EVT_MENU, self.onRenameAll, id=MainWindow.ID_MENUITEM_RENAME_ALL)
-        self.Bind(wx.EVT_MENU, self.onCropForPrint, id=MainWindow.ID_MENUITEM_PRINT_CROP)
+        self.Bind(wx.EVT_MENU, self.onClean,        id=MainWindow.ID_MENUITEM_CLEAN_ALL)
+        self.Bind(wx.EVT_MENU, self.onRenameAll,    id=MainWindow.ID_MENUITEM_RENAME_ALL)
+        self.Bind(wx.EVT_MENU, self.onCropSingle,   id=MainWindow.ID_MENUITEM_CROP_SINGLE)
+        self.Bind(wx.EVT_MENU, self.onCrop4Print,   id=MainWindow.ID_MENUITEM_CROP_4_PRINT)
+        self.Bind(wx.EVT_MENU, self.onCrop4Kindle,  id=MainWindow.ID_MENUITEM_CROP_4_KINDLE)
 
-        self.Bind(wx.EVT_BUTTON, self.onUpdate, id = MainWindow.ID_BTN_FETCH)
-        self.Bind(wx.EVT_BUTTON, self.onBrowser, id = MainWindow.ID_BTN_OPEN)
-        self.Bind(wx.EVT_BUTTON, self.onDownload, id = MainWindow.ID_BTN_DOWN)
+        self.Bind(wx.EVT_BUTTON, self.onUpdate,     id = MainWindow.ID_BTN_FETCH)
+        self.Bind(wx.EVT_BUTTON, self.onBrowser,    id = MainWindow.ID_BTN_OPEN)
+        self.Bind(wx.EVT_BUTTON, self.onDownload,   id = MainWindow.ID_BTN_DOWN)
 
-        self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onDownloadItem, id=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_CONTEXT_MENU, self.onShowPopup, id=MainWindow.ID_LIST)
+        self.Bind(wx.EVT_LIST_ITEM_ACTIVATED,   self.onDownloadItem,    id=MainWindow.ID_LIST)
+        self.Bind(wx.EVT_CONTEXT_MENU,          self.onShowPopup,       id=MainWindow.ID_LIST)
 
-        self.Bind(wx.EVT_MENU, self.onDownloadItem, id=MainWindow.ID_MENUITEM_DOWN, id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onViewItem, id=MainWindow.ID_MENUITEM_VIEW, id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onRenameItem, id=MainWindow.ID_MENUITEM_RENAME, id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onRemoveItem, id=MainWindow.ID_MENUITEM_REMOVE, id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onMerge, id=MainWindow.ID_MENUITEM_MERGE, id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onCrop, id=MainWindow.ID_MENUITEM_CROP, id2=MainWindow.ID_LIST)
+        self.Bind(wx.EVT_MENU, self.onDownloadItem, id=MainWindow.ID_MENUITEM_DOWN,     id2=MainWindow.ID_LIST)
+        self.Bind(wx.EVT_MENU, self.onViewItem,     id=MainWindow.ID_MENUITEM_VIEW,     id2=MainWindow.ID_LIST)
+        self.Bind(wx.EVT_MENU, self.onRenameItem,   id=MainWindow.ID_MENUITEM_RENAME,   id2=MainWindow.ID_LIST)
+        self.Bind(wx.EVT_MENU, self.onRemoveItem,   id=MainWindow.ID_MENUITEM_REMOVE,   id2=MainWindow.ID_LIST)
+        self.Bind(wx.EVT_MENU, self.onMerge,        id=MainWindow.ID_MENUITEM_MERGE,    id2=MainWindow.ID_LIST)
+        self.Bind(wx.EVT_MENU, self.onCrop,         id=MainWindow.ID_MENUITEM_CROP,     id2=MainWindow.ID_LIST)
 
         self.downloadIdx = 0
 
@@ -200,7 +205,27 @@ class MainWindow(wx.Frame):
     def onRenameAll(self, event):
         self.duokan.renameAll()
 
-    def onCropForPrint(self, event):
+    def onCropSingle(self, event):
+        file_wildcard = "Pdf files(*.pdf)|*.pdf"
+        dlg = wx.FileDialog(self,
+                            'Open file to crop',
+                            os.path.join(os.getcwd(), 'books'),
+                            style = wx.OPEN,
+                            wildcard = file_wildcard
+                            )
+        if dlg.ShowModal() == wx.ID_OK:
+            filePath = dlg.GetPath()
+            # print filePath
+            self.duokan.cropSingle(filePath)
+            retDlg = wx.MessageDialog(self,
+                                    'Finished!',
+                                    'Crop single',
+                                    wx.OK)
+            retDlg.ShowModal()
+            retDlg.Destroy()
+        dlg.Destroy()
+
+    def onCrop4Print(self, event):
         file_wildcard = "Pdf files(*.pdf)|*.pdf"
         dlg = wx.FileDialog(self,
                             'Open file to crop for printing',
@@ -211,10 +236,30 @@ class MainWindow(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             filePath = dlg.GetPath()
             print filePath
-            self.duokan.cropForPrint(filePath)
+            self.duokan.crop4Print(filePath)
             retDlg = wx.MessageDialog(self,
                                     'Finished!',
                                     'Crop for printing',
+                                    wx.OK)
+            retDlg.ShowModal()
+            retDlg.Destroy()
+        dlg.Destroy()
+
+    def onCrop4Kindle(self, event):
+        file_wildcard = "Pdf files(*.pdf)|*.pdf"
+        dlg = wx.FileDialog(self,
+                            'Open file to crop for kindle',
+                            os.path.join(os.getcwd(), 'books'),
+                            style = wx.OPEN,
+                            wildcard = file_wildcard
+                            )
+        if dlg.ShowModal() == wx.ID_OK:
+            filePath = dlg.GetPath()
+            print filePath
+            self.duokan.crop4Kindle(filePath)
+            retDlg = wx.MessageDialog(self,
+                                    'Finished!',
+                                    'Crop for kindle',
                                     wx.OK)
             retDlg.ShowModal()
             retDlg.Destroy()
