@@ -5,9 +5,7 @@ import subprocess
 from .callbacks import Callbacks
 
 class Commading(threading.Thread, Callbacks):
-	ON_START = 1
-	ON_STOP = 2
-	ON_LOG = 3
+	(ON_START, ON_STOP, ON_LOG) = range(1, 4)
 
 	def __init__(self, cmd):
 		threading.Thread.__init__(self)

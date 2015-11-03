@@ -24,32 +24,38 @@ class Fetch:
 
 	def get(self, url):
 		print '<%s GET %s>' % (get_timestamp(), url)
-		
-		if self.use_proxy:
-			wp = urllib.urlopen(url, proxies={'http' : self.proxy_config})
-		else:
-			wp = urllib.urlopen(url)
 
-		response = wp.read();
+		try:
+			if self.use_proxy:
+				wp = urllib.urlopen(url, proxies={'http' : self.proxy_config})
+			else:
+				wp = urllib.urlopen(url)
+			response = wp.read();
+		except:
+			print 'failed...'
+			response = ''
 
 		return response
 		
 	def wget(self, url, filename):
 		print '<%s DOWNLOAD %s>' % (get_timestamp(), url)
-		cmd = "wget %s -O %s" % (url, filename)
-		# retry 10 times, timeout 120s
-		args = '-c -T 120 -t 10'
-		# quiet
-		# args = '%s -q' % args
-		# --no-clobber
-		args = '%s -nc' % args
-		# proxy
-		if self.use_proxy:
-			args = '%s -e \"http_proxy=%s\"' % (args, self.proxy_config)
-		cmd = '%s %s' % (cmd, args)
-		# multi-thread
-		# cmd = '%s &' % cmd
-		os.system(cmd)
+		try:
+			cmd = "wget %s -O %s" % (url, filename)
+			# retry 10 times, timeout 120s
+			args = '-c -T 120 -t 10'
+			# quiet
+			# args = '%s -q' % args
+			# --no-clobber
+			args = '%s -nc' % args
+			# proxy
+			if self.use_proxy:
+				args = '%s -e \"http_proxy=%s\"' % (args, self.proxy_config)
+			cmd = '%s %s' % (cmd, args)
+			# multi-thread
+			# cmd = '%s &' % cmd
+			os.system(cmd)
+		except:
+			print 'failed...'
 
 class Spider():
 	todo = []

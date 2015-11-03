@@ -77,6 +77,16 @@ class Duokan:
         DuoPdf.merge(destPath, srcPath)
 
     @staticmethod
+    def mergeSingle(src):
+        if not os.path.isdir(src):
+            Log.w('[%s] is not a diractory, exit...' % (src, ))
+            return
+        path = os.path.split(src)
+        id = path[1]
+        destPath = os.path.join(path[0], id+'.pdf')
+        DuoPdf.merge(destPath, src)
+
+    @staticmethod
     def crop(id):
         '''crop pdf file in books/new/${id}.pdf'''
         srcPath = os.path.join(os.path.curdir, 'books', 'new', id+'.pdf')

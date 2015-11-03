@@ -14,80 +14,74 @@ class MainWindow(wx.Frame):
     PROXY_AUTH_PSWD = ''
     PROXY_AUTH = '%s:%s' % (PROXY_AUTH_USER, PROXY_AUTH_PSWD)
 
+    tsize = (20, 20)
+
     BG_FREED = wx.Colour(255, 255, 153)
     BG_DOWN = wx.Colour(146, 208, 80)
+
+    (ID_MENUITEM_FETCH, ID_MENUITEM_DOWNLOAD_ALL, ID_MENUITEM_OPEN_IN_BROWER, ID_MENUITEM_OPEN_NEW, ID_MENUITEM_SHUTDOWN,
+     ID_MENUITEM_CLEAN_TMP, ID_MENUITEM_RENAME_ALL, ID_MENUITEM_MERGE_SINGLE, ID_MENUITEM_CROP_SINGLE, ID_MENUITEM_CROP_4_PRINT, ID_MENUITEM_CROP_4_KINDLE,
+     ID_MENUITEM_DOWN, ID_MENUITEM_VIEW, ID_MENUITEM_REMOVE, ID_MENUITEM_MERGE, ID_MENUITEM_CROP, ID_MENUITEM_RENAME,
+     ID_LIST,
+     ID_TOOL_FETCH, ID_TOOL_OPEN, ID_TOOL_DOWN) = range(0, 21)
 
     COLUMNS = ['#', 'ID', 'TITLE', 'AUTHOR', 'LINK', 'PROGRESS']
     (COLUMN_NUM, COLUMN_ID, COLUMN_TITLE, COLUMN_AUTHOR, COLUMN_LINK, COLUMN_PROGRESS) = range(0, 6)
     COLUMNS_WIDTH = [50, 200, 200, 200, 200, 100]
 
-    MENUITEMS = ['&Fetch', '&Download all', '&Open in brower', '&Open download folder',
-                 '&Clean tmp folder', '&Rename all', '&Crop', 'Crop for &printing', 'Crop for &kindle',
-                 'Download', 'View in browser', 'Remove', 'Merge', 'Crop', 'Rename']
-    (ID_MENUITEM_FETCH, ID_MENUITEM_DOWNLOAD_ALL, ID_MENUITEM_OPEN_IN_BROWER, ID_MENUITEM_OPEN_NEW,
-     ID_MENUITEM_CLEAN_ALL, ID_MENUITEM_RENAME_ALL, ID_MENUITEM_CROP_SINGLE, ID_MENUITEM_CROP_4_PRINT, ID_MENUITEM_CROP_4_KINDLE,
-     ID_MENUITEM_DOWN, ID_MENUITEM_VIEW, ID_MENUITEM_REMOVE, ID_MENUITEM_MERGE, ID_MENUITEM_CROP, ID_MENUITEM_RENAME,
-     ID_BTN_FETCH, ID_BTN_OPEN, ID_BTN_DOWN, ID_LIST) = range(0, 19)
-
     def __init__(self, tt):
         self.duokan = Duokan()
 
+        self.MENUBAR = [('&File', (
+                                ('&Fetch',                  '', MainWindow.ID_MENUITEM_FETCH,   self.onUpdate),
+                                ('&Download all',           '', MainWindow.ID_MENUITEM_DOWNLOAD_ALL,  self.onDownloadAll),
+                                ("", '', '', ""),
+                                ('&Open in brower',         '', MainWindow.ID_MENUITEM_OPEN_IN_BROWER,  self.onBrowser),
+                                ('&Open download folder',   '', MainWindow.ID_MENUITEM_OPEN_NEW,  self.onOpenNewFolder),
+                                ("", '', '', ""),
+                                ('Shutdown after finish',   '', MainWindow.ID_MENUITEM_SHUTDOWN, self.menuShutdown, wx.ITEM_CHECK),
+                         )),
+                        ('&Edit', (('&Clean tmp folder',     '', MainWindow.ID_MENUITEM_CLEAN_TMP,   self.onCleanTmp),
+                                   ('&Rename all',           '', MainWindow.ID_MENUITEM_RENAME_ALL,   self.onRenameAll),
+                                   ("", "", '', ""),
+                                   ('&Merge',                 '', MainWindow.ID_MENUITEM_MERGE_SINGLE,   self.onMergeSingle),
+                                   ('&Crop',                  '', MainWindow.ID_MENUITEM_CROP_SINGLE,   self.onCropSingle),
+                                   ('Crop for &printing',     '', MainWindow.ID_MENUITEM_CROP_4_PRINT,   self.onCrop4Print),
+                                   ('Crop for &kindle',       '', MainWindow.ID_MENUITEM_CROP_4_KINDLE,   self.onCrop4Kindle)
+                        ))
+               ]
+
+        self.POPMENU = [
+            (MainWindow.ID_MENUITEM_DOWN,   'Download',         self.onDownloadItem,    MainWindow.ID_LIST),
+            (MainWindow.ID_MENUITEM_VIEW,   'View in browser',  self.onBrowserItem,        MainWindow.ID_LIST),
+            (MainWindow.ID_MENUITEM_REMOVE, 'Remove',           self.onRemoveItem,      MainWindow.ID_LIST),
+            (MainWindow.ID_MENUITEM_MERGE,  'Merge',            self.onMergeItem,           MainWindow.ID_LIST),
+            (MainWindow.ID_MENUITEM_CROP,   'Crop',             self.onCropItem,            MainWindow.ID_LIST),
+            (MainWindow.ID_MENUITEM_RENAME, 'Rename',           self.onRenameItem,      MainWindow.ID_LIST)
+        ]
+
+        self.TOOLBAR = [
+            (MainWindow.ID_TOOL_FETCH, 'Fetch',            wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_BUTTON, MainWindow.tsize), self.onUpdate),
+            (MainWindow.ID_TOOL_OPEN,  'View in browser',  wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_BUTTON, MainWindow.tsize), self.onBrowser),
+            (MainWindow.ID_TOOL_DOWN,  'Download all',     wx.ArtProvider.GetBitmap(wx.ART_GO_DOWN, wx.ART_BUTTON, MainWindow.tsize), self.onDownloadAll)
+        ]
+
         wx.Frame.__init__(self, None, title=tt, size=(1020, 800))
 
-        #menu#################################
-        # create a menu
-        menuFile = wx.Menu()
-
-        # add  menu item
-        menuFile.Append(MainWindow.ID_MENUITEM_FETCH,           MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_FETCH])
-        menuFile.Append(MainWindow.ID_MENUITEM_DOWNLOAD_ALL,    MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_DOWNLOAD_ALL])
-        menuFile.AppendSeparator()
-        menuFile.Append(MainWindow.ID_MENUITEM_OPEN_IN_BROWER,  MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_OPEN_IN_BROWER])
-        menuFile.Append(MainWindow.ID_MENUITEM_OPEN_NEW,        MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_OPEN_NEW])
-
-        # create a menu
-        menuEdit = wx.Menu()
-        menuEdit.Append(MainWindow.ID_MENUITEM_CLEAN_ALL,     MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CLEAN_ALL])
-        menuEdit.Append(MainWindow.ID_MENUITEM_RENAME_ALL,    MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_RENAME_ALL])
-        menuEdit.AppendSeparator()
-        menuEdit.Append(MainWindow.ID_MENUITEM_CROP_SINGLE,   MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CROP_SINGLE])
-        menuEdit.Append(MainWindow.ID_MENUITEM_CROP_4_PRINT,  MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CROP_4_PRINT])
-        menuEdit.Append(MainWindow.ID_MENUITEM_CROP_4_KINDLE, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CROP_4_KINDLE])
-
-        # create menubar and add item
-        menuBar = wx.MenuBar()
-        menuBar.Append(menuFile, "&File")
-        menuBar.Append(menuEdit, "&Edit")
-
-        self.SetMenuBar(menuBar)
+        self.menubar = self.createMenubar()
         self.CreateStatusBar()
-
-        self.popupmenu = wx.Menu()
-        self.popupmenu.Append(MainWindow.ID_MENUITEM_DOWN,   MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_DOWN])
-        self.popupmenu.Append(MainWindow.ID_MENUITEM_VIEW,   MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_VIEW])
-        self.popupmenu.Append(MainWindow.ID_MENUITEM_REMOVE, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_REMOVE])
-        self.popupmenu.Append(MainWindow.ID_MENUITEM_MERGE,  MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_MERGE])
-        self.popupmenu.Append(MainWindow.ID_MENUITEM_CROP,   MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_CROP])
-        self.popupmenu.Append(MainWindow.ID_MENUITEM_RENAME, MainWindow.MENUITEMS[MainWindow.ID_MENUITEM_RENAME])
+        self.createPopmenu()
+        self.toolbar = self.createToolBar()
 
         #panel######################################
         panel = wx.Panel(self)
 
-        tsize = (20, 20)
-
         lblUrl=wx.StaticText(panel, -1, "Special URL: ", style=1)
         self.teUrl = wx.TextCtrl(panel, style=wx.TE_PROCESS_ENTER)
 
-        btnUpdate = wx.BitmapButton(panel, MainWindow.ID_BTN_FETCH,     wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_BUTTON, tsize))
-        btnBrowser = wx.BitmapButton(panel, MainWindow.ID_BTN_OPEN,     wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_BUTTON, tsize))
-        btnDownload = wx.BitmapButton(panel, MainWindow.ID_BTN_DOWN,    wx.ArtProvider.GetBitmap(wx.ART_GO_DOWN, wx.ART_BUTTON, tsize))
-
         hbox = wx.BoxSizer()
-        hbox.Add(btnUpdate, proportion=0, flag=wx.RIGHT, border=5)
         hbox.Add(lblUrl, proportion=0, flag=wx.LEFT|wx.ALIGN_CENTER_VERTICAL, border=5)
         hbox.Add(self.teUrl, proportion=1, flag=wx.EXPAND)
-        hbox.Add(btnBrowser, proportion=0, flag=wx.LEFT, border=5)
-        hbox.Add(btnDownload, proportion=0, flag=wx.LEFT, border=5)
 
         self.gauge = wx.Gauge(panel, -1, 100, style = wx.GA_PROGRESSBAR)
         self.list = wx.ListCtrl(panel, MainWindow.ID_LIST, style=wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.LC_HRULES | wx.LC_VRULES)
@@ -104,30 +98,8 @@ class MainWindow(wx.Frame):
 
         panel.SetSizer(vbox)
 
-        self.Bind(wx.EVT_MENU, self.onUpdate,       id=MainWindow.ID_MENUITEM_FETCH)
-        self.Bind(wx.EVT_MENU, self.onBrowser,      id=MainWindow.ID_MENUITEM_OPEN_IN_BROWER)
-        self.Bind(wx.EVT_MENU, self.onBrowserNew,   id=MainWindow.ID_MENUITEM_OPEN_NEW)
-        self.Bind(wx.EVT_MENU, self.onDownload,     id=MainWindow.ID_MENUITEM_DOWNLOAD_ALL)
-
-        self.Bind(wx.EVT_MENU, self.onClean,        id=MainWindow.ID_MENUITEM_CLEAN_ALL)
-        self.Bind(wx.EVT_MENU, self.onRenameAll,    id=MainWindow.ID_MENUITEM_RENAME_ALL)
-        self.Bind(wx.EVT_MENU, self.onCropSingle,   id=MainWindow.ID_MENUITEM_CROP_SINGLE)
-        self.Bind(wx.EVT_MENU, self.onCrop4Print,   id=MainWindow.ID_MENUITEM_CROP_4_PRINT)
-        self.Bind(wx.EVT_MENU, self.onCrop4Kindle,  id=MainWindow.ID_MENUITEM_CROP_4_KINDLE)
-
-        self.Bind(wx.EVT_BUTTON, self.onUpdate,     id = MainWindow.ID_BTN_FETCH)
-        self.Bind(wx.EVT_BUTTON, self.onBrowser,    id = MainWindow.ID_BTN_OPEN)
-        self.Bind(wx.EVT_BUTTON, self.onDownload,   id = MainWindow.ID_BTN_DOWN)
-
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED,   self.onDownloadItem,    id=MainWindow.ID_LIST)
         self.Bind(wx.EVT_CONTEXT_MENU,          self.onShowPopup,       id=MainWindow.ID_LIST)
-
-        self.Bind(wx.EVT_MENU, self.onDownloadItem, id=MainWindow.ID_MENUITEM_DOWN,     id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onViewItem,     id=MainWindow.ID_MENUITEM_VIEW,     id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onRenameItem,   id=MainWindow.ID_MENUITEM_RENAME,   id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onRemoveItem,   id=MainWindow.ID_MENUITEM_REMOVE,   id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onMerge,        id=MainWindow.ID_MENUITEM_MERGE,    id2=MainWindow.ID_LIST)
-        self.Bind(wx.EVT_MENU, self.onCrop,         id=MainWindow.ID_MENUITEM_CROP,     id2=MainWindow.ID_LIST)
 
         self.downloadIdx = 0
 
@@ -135,6 +107,54 @@ class MainWindow(wx.Frame):
         # sys.stdout = self.redir
 
         self.Centre()
+
+    def createMenubar(self):
+        menuBar = wx.MenuBar()
+        for eachMenu in self.MENUBAR:
+            label = eachMenu[0]
+            items = eachMenu[1]
+            menuBar.Append(self.createMenuItems(items), label)
+        self.SetMenuBar(menuBar)
+        return menuBar
+
+    def createMenuItems(self, menuData):
+        menu = wx.Menu()
+        for item in menuData:
+            if len(item) == 2:
+                label = item[0]
+                subMenu = self.createMenuItems(item[1])
+                menu.AppendMenu(wx.ID_ANY, label, subMenu)
+            else:
+                label = item[0]
+                help = item[1]
+                id = item[2]
+                handler = item[3]
+                if len(item) > 4:
+                    kind = item[4]
+                else:
+                    kind = wx.ITEM_NORMAL
+
+                if label:
+                    menu.Append(id, label, help, kind=kind)
+                    self.Bind(wx.EVT_MENU, handler, id=id)
+                else:
+                    menu.AppendSeparator()
+        return menu
+
+    def createPopmenu(self):
+        self.popupmenu = wx.Menu()
+        for item in self.POPMENU:
+            self.popupmenu.Append(item[0],   item[1])
+            self.Bind(wx.EVT_MENU, item[2], id=item[0],     id2=item[3])
+        return self.popupmenu
+
+    def createToolBar(self):
+        toolbar = self.CreateToolBar()
+        for item in self.TOOLBAR:
+            toolbar.AddLabelTool(item[0], item[1], item[2])
+            self.Bind(wx.EVT_TOOL, item[3], id=item[0])
+        toolbar.Realize()
+        return toolbar
 
     def appendItem(self, id, title='', author='', link='', freed=False, done=False, progress='=========='):
         newIdx = self.list.GetItemCount()
@@ -192,18 +212,41 @@ class MainWindow(wx.Frame):
     def onBrowser(self, event):
         self.duokan.openInNewTab(self.teUrl.GetValue())
 
-    def onBrowserNew(self, event):
+    def onOpenNewFolder(self, event):
         self.duokan.openNewFolder()
 
-    def onDownload(self, event):
+    def menuShutdown(self, event):
+        print self.menubar.IsChecked(MainWindow.ID_MENUITEM_SHUTDOWN)
+
+    def onDownloadAll(self, event):
         self.downloadIdx = 0
         self.startDownload()
 
-    def onClean(self, event):
+    def onCleanTmp(self, event):
         self.duokan.cleanTmp()
 
     def onRenameAll(self, event):
         self.duokan.renameAll()
+
+    def onMergeSingle(self, event):
+        file_wildcard = "Pdf files(*.pdf)|*.pdf"
+        dlg = wx.DirDialog(self,
+                            'Open dir to merge',
+                            os.path.join(os.getcwd(), 'tmp'),
+                            style = wx.OPEN,
+                            )
+        if dlg.ShowModal() == wx.ID_OK:
+            filePath = dlg.GetPath()
+            # print filePath
+            self.duokan.mergeSingle(filePath)
+            retDlg = wx.MessageDialog(self,
+                                    'Finished!',
+                                    'Merge single',
+                                    wx.OK)
+            retDlg.ShowModal()
+            retDlg.Destroy()
+        dlg.Destroy()
+
 
     def onCropSingle(self, event):
         file_wildcard = "Pdf files(*.pdf)|*.pdf"
@@ -283,7 +326,7 @@ class MainWindow(wx.Frame):
             self.list.PopupMenu(self.popupmenu, pos)
 
     # open link in browser
-    def onViewItem(self, event):
+    def onBrowserItem(self, event):
         idx = self.list.GetFirstSelected()
         if idx != -1:
             url = self.list.GetItemText(idx, MainWindow.COLUMN_LINK)
@@ -303,13 +346,13 @@ class MainWindow(wx.Frame):
         if idx != -1:
             self.list.DeleteItem(idx)
 
-    def onCrop(self, event):
+    def onCropItem(self, event):
         idx = self.list.GetFirstSelected()
         if idx != -1:
             id = self.list.GetItemText(idx, MainWindow.COLUMN_ID)
             self.duokan.crop(id)
 
-    def onMerge(self, event):
+    def onMergeItem(self, event):
         idx = self.list.GetFirstSelected()
         if idx != -1:
             id = self.list.GetItemText(idx, MainWindow.COLUMN_ID)
@@ -335,12 +378,13 @@ class MainWindow(wx.Frame):
         wx.CallAfter(self.gauge.SetValue, 100)
         self.list.SetItemBackgroundColour(self.downloadIdx, MainWindow.BG_DOWN)
 
-        # crop
-        # id = self.list.GetItemText(self.downloadIdx, MainWindow.COLUMN_ID)
-
         # start next
         self.downloadIdx += 1
         self.startDownload()
+
+        if self.downloadIdx >= self.list.GetItemCount():
+            if self.menubar.IsChecked(MainWindow.ID_MENUITEM_SHUTDOWN):
+                os.system('shutdown -t 60 -f -s')
 
     # for downloader
     def cbLog(self, event, str):
@@ -364,86 +408,86 @@ class MainWindow(wx.Frame):
         wx.CallAfter(self.appendItem, id, title, author, link, (not notFreed), download)
 
 class DownloaderWnd(wx.Frame):
-	def __init__(self, tt=''):
-		wx.Frame.__init__(self, None, title=tt, size=(640, 170))
+    def __init__(self, tt=''):
+        wx.Frame.__init__(self, None, title=tt, size=(640, 170))
 
-		panel = wx.Panel(self)
+        panel = wx.Panel(self)
 
-		lblId=wx.StaticText(panel, -1, "ID: ", style=1)
-		lblName=wx.StaticText(panel, -1, "Name: ", style=1)
+        lblId=wx.StaticText(panel, -1, "ID: ", style=1)
+        lblName=wx.StaticText(panel, -1, "Name: ", style=1)
 
-		self.teId = wx.TextCtrl(panel, style=wx.TE_PROCESS_ENTER)
-		self.teName = wx.TextCtrl(panel, style=wx.TE_PROCESS_ENTER)
-		self.btnDownload = wx.ToggleButton(panel, label='Download')
-		self.btnDownload.Bind(wx.EVT_TOGGLEBUTTON, self.start)
+        self.teId = wx.TextCtrl(panel, style=wx.TE_PROCESS_ENTER)
+        self.teName = wx.TextCtrl(panel, style=wx.TE_PROCESS_ENTER)
+        self.btnDownload = wx.ToggleButton(panel, label='Download')
+        self.btnDownload.Bind(wx.EVT_TOGGLEBUTTON, self.start)
 
-		self.teName.Bind(wx.EVT_TEXT_ENTER, self.OnKeyDown)
+        self.teName.Bind(wx.EVT_TEXT_ENTER, self.OnKeyDown)
 
-		hbox = wx.BoxSizer()
-		hbox.Add(lblId, proportion=0, flag=wx.LEFT|wx.ALIGN_CENTER_VERTICAL, border=5)
-		hbox.Add(self.teId, proportion=1, flag=wx.EXPAND)
-		hbox.Add(lblName, proportion=0, flag=wx.LEFT|wx.ALIGN_CENTER_VERTICAL, border=5)
-		hbox.Add(self.teName, proportion=1, flag=wx.EXPAND)
-		hbox.Add(self.btnDownload, proportion=0, flag=wx.LEFT, border=5)
+        hbox = wx.BoxSizer()
+        hbox.Add(lblId, proportion=0, flag=wx.LEFT|wx.ALIGN_CENTER_VERTICAL, border=5)
+        hbox.Add(self.teId, proportion=1, flag=wx.EXPAND)
+        hbox.Add(lblName, proportion=0, flag=wx.LEFT|wx.ALIGN_CENTER_VERTICAL, border=5)
+        hbox.Add(self.teName, proportion=1, flag=wx.EXPAND)
+        hbox.Add(self.btnDownload, proportion=0, flag=wx.LEFT, border=5)
 
-		self.teInfo = wx.TextCtrl(panel, style=wx.TE_MULTILINE | wx.HSCROLL)
-		self.gauge = wx.Gauge(panel, -1, 100, style = wx.GA_PROGRESSBAR)
+        self.teInfo = wx.TextCtrl(panel, style=wx.TE_MULTILINE | wx.HSCROLL)
+        self.gauge = wx.Gauge(panel, -1, 100, style = wx.GA_PROGRESSBAR)
 
-		vbox = wx.BoxSizer(wx.VERTICAL)
-		vbox.Add(hbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
-		vbox.Add(self.gauge, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
-		vbox.Add(self.teInfo, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        vbox.Add(hbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+        vbox.Add(self.gauge, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+        vbox.Add(self.teInfo, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
 
-		panel.SetSizer(vbox)
+        panel.SetSizer(vbox)
 
-	def OnExit(self, event):
-		self.stop(event)
-		self.Close(True)
+    def OnExit(self, event):
+        self.stop(event)
+        self.Close(True)
 
-	def OnKeyDown(self, event):
-		self.start(event)
+    def OnKeyDown(self, event):
+        self.start(event)
 
-	def start(self, event):
-		if self.btnDownload.GetValue():
-			self.gauge.SetValue(10)
-			self.teInfo.Clear()
+    def start(self, event):
+        if self.btnDownload.GetValue():
+            self.gauge.SetValue(10)
+            self.teInfo.Clear()
 
-			bid = str(self.teId.GetValue())
-			name = str(self.teName.GetValue())
-			self.addLog('ID: %s\n' % bid)
-			self.addLog('Name: %s\n' % name)
+            bid = str(self.teId.GetValue())
+            name = str(self.teName.GetValue())
+            self.addLog('ID: %s\n' % bid)
+            self.addLog('Name: %s\n' % name)
 
-			self.addLog('downloading...\n')
-			self.addLog('---------\n')
+            self.addLog('downloading...\n')
+            self.addLog('---------\n')
 
-			self.downloader = Downloader(bid, name, MainWindow.PROXY_HOST, MainWindow.PROXY_AUTH_USER, MainWindow.PROXY_AUTH_PSWD)
-			self.downloader.bind(Downloader.ON_STOP, self.cbStop)
-			self.downloader.bind(Downloader.EVT_LOG, self.cbLog)
-			self.downloader.bind(Downloader.EVT_PROG, self.cbProgress)
-			self.downloader.start()
-		else:
-			self.downloader.stop()
+            self.downloader = Downloader(bid, name, MainWindow.PROXY_HOST, MainWindow.PROXY_AUTH_USER, MainWindow.PROXY_AUTH_PSWD)
+            self.downloader.bind(Downloader.ON_STOP, self.cbStop)
+            self.downloader.bind(Downloader.EVT_LOG, self.cbLog)
+            self.downloader.bind(Downloader.EVT_PROG, self.cbProgress)
+            self.downloader.start()
+        else:
+            self.downloader.stop()
 
-	def stop(self, event):
-		self.downloader.stop()
+    def stop(self, event):
+        self.downloader.stop()
 
-	def addLog(self, log):
-		self.teInfo.AppendText(log)
+    def addLog(self, log):
+        self.teInfo.AppendText(log)
 
-	def cbStop(self, event):
-		wx.CallAfter(self.gauge.SetValue, 100)
+    def cbStop(self, event):
+        wx.CallAfter(self.gauge.SetValue, 100)
 
-	def cbLog(self, event, str):
-		wx.CallAfter(self.addLog, str)
+    def cbLog(self, event, str):
+        wx.CallAfter(self.addLog, str)
 
-	def cbProgress(self, event, prog):
-		wx.CallAfter(self.gauge.SetValue, prog)
+    def cbProgress(self, event, prog):
+        wx.CallAfter(self.gauge.SetValue, prog)
 
-	def setId(self, id):
-		self.teId.SetValue(id)
+    def setId(self, id):
+        self.teId.SetValue(id)
 
-	def setName(self, name):
-		self.teName.SetValue(name)
+    def setName(self, name):
+        self.teName.SetValue(name)
 
 if __name__ == '__main__':
     app = wx.App(0)
