@@ -12,7 +12,7 @@ cx = dict(
 )
 
 setup(
-    name = "Bookload.",
+    name = "Bookload",
     description = "Download free book.",
     version = "1.1.0.0",
     # console=[cx],

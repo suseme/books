@@ -33,36 +33,36 @@ class MainWindow(wx.Frame):
         self.duokan = Duokan()
 
         self.MENUBAR = [('&File', (
-                                ('&Fetch',                  '', MainWindow.ID_MENUITEM_FETCH,   self.onUpdate),
-                                ('&Download all',           '', MainWindow.ID_MENUITEM_DOWNLOAD_ALL,  self.onDownloadAll),
+                                ('&Fetch',                  '', MainWindow.ID_MENUITEM_FETCH,           self.onUpdate),
+                                ('&Download all',           '', MainWindow.ID_MENUITEM_DOWNLOAD_ALL,    self.onDownloadAll),
                                 ("", '', '', ""),
                                 ('&Open in brower',         '', MainWindow.ID_MENUITEM_OPEN_IN_BROWER,  self.onBrowser),
-                                ('&Open download folder',   '', MainWindow.ID_MENUITEM_OPEN_NEW,  self.onOpenNewFolder),
+                                ('&Open download folder',   '', MainWindow.ID_MENUITEM_OPEN_NEW,        self.onOpenNewFolder),
                                 ("", '', '', ""),
-                                ('Shutdown after finish',   '', MainWindow.ID_MENUITEM_SHUTDOWN, self.menuShutdown, wx.ITEM_CHECK),
+                                ('Shutdown after finish',   '', MainWindow.ID_MENUITEM_SHUTDOWN,        self.menuShutdown, wx.ITEM_CHECK),
                          )),
-                        ('&Edit', (('&Clean tmp folder',     '', MainWindow.ID_MENUITEM_CLEAN_TMP,   self.onCleanTmp),
-                                   ('&Rename all',           '', MainWindow.ID_MENUITEM_RENAME_ALL,   self.onRenameAll),
+                        ('&Edit', (('&Clean tmp folder',     '', MainWindow.ID_MENUITEM_CLEAN_TMP,      self.onCleanTmp),
+                                   ('&Rename all',           '', MainWindow.ID_MENUITEM_RENAME_ALL,     self.onRenameAll),
                                    ("", "", '', ""),
-                                   ('&Merge',                 '', MainWindow.ID_MENUITEM_MERGE_SINGLE,   self.onMergeSingle),
+                                   ('&Merge',                 '', MainWindow.ID_MENUITEM_MERGE_SINGLE,  self.onMergeSingle),
                                    ('&Crop',                  '', MainWindow.ID_MENUITEM_CROP_SINGLE,   self.onCropSingle),
-                                   ('Crop for &printing',     '', MainWindow.ID_MENUITEM_CROP_4_PRINT,   self.onCrop4Print),
-                                   ('Crop for &kindle',       '', MainWindow.ID_MENUITEM_CROP_4_KINDLE,   self.onCrop4Kindle)
+                                   ('Crop for &printing',     '', MainWindow.ID_MENUITEM_CROP_4_PRINT,  self.onCrop4Print),
+                                   ('Crop for &kindle',       '', MainWindow.ID_MENUITEM_CROP_4_KINDLE, self.onCrop4Kindle)
                         ))
                ]
 
         self.POPMENU = [
             (MainWindow.ID_MENUITEM_DOWN,   'Download',         self.onDownloadItem,    MainWindow.ID_LIST),
-            (MainWindow.ID_MENUITEM_VIEW,   'View in browser',  self.onBrowserItem,        MainWindow.ID_LIST),
+            (MainWindow.ID_MENUITEM_VIEW,   'View in browser',  self.onBrowserItem,     MainWindow.ID_LIST),
             (MainWindow.ID_MENUITEM_REMOVE, 'Remove',           self.onRemoveItem,      MainWindow.ID_LIST),
-            (MainWindow.ID_MENUITEM_MERGE,  'Merge',            self.onMergeItem,           MainWindow.ID_LIST),
-            (MainWindow.ID_MENUITEM_CROP,   'Crop',             self.onCropItem,            MainWindow.ID_LIST),
+            (MainWindow.ID_MENUITEM_MERGE,  'Merge',            self.onMergeItem,       MainWindow.ID_LIST),
+            (MainWindow.ID_MENUITEM_CROP,   'Crop',             self.onCropItem,        MainWindow.ID_LIST),
             (MainWindow.ID_MENUITEM_RENAME, 'Rename',           self.onRenameItem,      MainWindow.ID_LIST)
         ]
 
         self.TOOLBAR = [
-            (MainWindow.ID_TOOL_FETCH, 'Fetch',            wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_BUTTON, MainWindow.tsize), self.onUpdate),
-            (MainWindow.ID_TOOL_OPEN,  'View in browser',  wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_BUTTON, MainWindow.tsize), self.onBrowser),
+            (MainWindow.ID_TOOL_FETCH, 'Fetch',            wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_BUTTON, MainWindow.tsize),    self.onUpdate),
+            (MainWindow.ID_TOOL_OPEN,  'View in browser',  wx.ArtProvider.GetBitmap(wx.ART_FIND, wx.ART_BUTTON, MainWindow.tsize),    self.onBrowser),
             (MainWindow.ID_TOOL_DOWN,  'Download all',     wx.ArtProvider.GetBitmap(wx.ART_GO_DOWN, wx.ART_BUTTON, MainWindow.tsize), self.onDownloadAll)
         ]
 

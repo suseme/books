@@ -56,8 +56,9 @@ class Duokan:
         for item in os.listdir(path):
             bid, extname = os.path.splitext(item)
             title = self.persist.getTitle(bid)
-            newName =  '%s%s' % (title, extname)
-            os.rename(os.path.join(path, item), os.path.join(path, newName))
+            if title:
+                newName =  '%s%s' % (title, extname)
+                os.rename(os.path.join(path, item), os.path.join(path, newName))
 
     def openNewFolder(self):
         path = os.path.join(os.path.curdir, 'books', 'new')
