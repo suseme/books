@@ -1,6 +1,6 @@
 __author__ = 'vin@misday.com'
 
-import os, webbrowser
+import os, webbrowser, ConfigParser
 from spider import Callbacks, Commading
 from duoPdf import DuoPdf
 from duoPersist import Persist
@@ -172,3 +172,30 @@ class Downloader(Commading):
             prog = int(str[0]) * 100 / int(str[1])
             # self.hdl.cbProgress(prog)
             self.dispatch(Downloader.EVT_PROG, prog)
+
+class Config:
+    KEY_PROXY = 'proxy'
+    KEY_PROXY_HOST = 'host'
+    KEY_PROXY_USER = 'user'
+    KEY_PROXY_PAWD = 'pswd'
+
+    def __init__(self, name = 'config.conf'):
+        self.conf = ConfigParser.ConfigParser()
+        self.conf.read(name)
+
+        self._getProxy()
+
+    def _getProxy(self):
+        self.host = ''
+        self.user = ''
+        self.pswd = ''
+        try:
+            self.host = self.conf.get(Config.KEY_PROXY, Config.KEY_PROXY_HOST)
+            self.user = self.conf.get(Config.KEY_PROXY, Config.KEY_PROXY_USER)
+            self.pswd = self.conf.get(Config.KEY_PROXY, Config.KEY_PROXY_PAWD)
+        except:
+            Log.w('read proxy failed')
+
+    def getProxy(self):
+        return (self.host, self.user, self.pswd)
+

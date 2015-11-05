@@ -6,7 +6,7 @@ __author__ = 'vin@misday.com'
 import os
 import wx
 from duoSpider import Special
-from duoMain import Duokan, Downloader
+from duoMain import Duokan, Downloader, Config
 
 class MainWindow(wx.Frame):
     PROXY_HOST = ''
@@ -203,7 +203,8 @@ class MainWindow(wx.Frame):
 
     def onUpdate(self, event):
         self.gauge.SetValue(10)
-        special = Special(MainWindow.PROXY_HOST, MainWindow.PROXY_AUTH_USER, MainWindow.PROXY_AUTH_PSWD)
+        proxy = self.conf.getProxy()
+        special = Special(proxy[0], proxy[1], proxy[2])
         special.bind(Special.EVT_FIND_LINK, self.cbAddUrl)
         special.bind(Special.EVT_FIND_BOOK, self.cbAddBook)
         special.start()
@@ -361,7 +362,8 @@ class MainWindow(wx.Frame):
     def startDownload(self):
         if self.downloadIdx < self.list.GetItemCount():
             id = self.list.GetItemText(self.downloadIdx, MainWindow.COLUMN_ID)
-            self.down = Downloader(id, id, MainWindow.PROXY_HOST, MainWindow.PROXY_AUTH_USER, MainWindow.PROXY_AUTH_PSWD)
+            proxy = self.conf.getProxy()
+            self.down = Downloader(id, id, proxy[0], proxy[1], proxy[2])
             self.down.bind(Downloader.EVT_START, self.cbStart)
             self.down.bind(Downloader.EVT_STOP, self.cbStop)
             self.down.bind(Downloader.EVT_LOG, self.cbLog)
