@@ -9,11 +9,6 @@ from duoSpider import Special
 from duoMain import Duokan, Downloader, Config
 
 class MainWindow(wx.Frame):
-    PROXY_HOST = ''
-    PROXY_AUTH_USER = ''
-    PROXY_AUTH_PSWD = ''
-    PROXY_AUTH = '%s:%s' % (PROXY_AUTH_USER, PROXY_AUTH_PSWD)
-
     tsize = (20, 20)
 
     BG_FREED = wx.Colour(255, 255, 153)
@@ -31,6 +26,7 @@ class MainWindow(wx.Frame):
 
     def __init__(self, tt):
         self.duokan = Duokan()
+        self.conf = Config()
 
         self.MENUBAR = [('&File', (
                                 ('&Fetch',                  '', MainWindow.ID_MENUITEM_FETCH,           self.onUpdate),
@@ -314,7 +310,7 @@ class MainWindow(wx.Frame):
         idx = self.list.GetFocusedItem()
         id = self.list.GetItemText(idx, MainWindow.COLUMN_ID)
         title = self.list.GetItemText(idx, MainWindow.COLUMN_TITLE)
-        win = DownloaderWnd(title)
+        win = DownloaderWnd(self.conf, title)
         win.setId(id)
         win.setName(id)
         win.Show(True)
@@ -410,7 +406,9 @@ class MainWindow(wx.Frame):
         wx.CallAfter(self.appendItem, id, title, author, link, (not notFreed), download)
 
 class DownloaderWnd(wx.Frame):
-    def __init__(self, tt=''):
+    def __init__(self, conf, tt=''):
+        self.conf = conf
+
         wx.Frame.__init__(self, None, title=tt, size=(640, 170))
 
         panel = wx.Panel(self)
@@ -462,7 +460,8 @@ class DownloaderWnd(wx.Frame):
             self.addLog('downloading...\n')
             self.addLog('---------\n')
 
-            self.downloader = Downloader(bid, name, MainWindow.PROXY_HOST, MainWindow.PROXY_AUTH_USER, MainWindow.PROXY_AUTH_PSWD)
+            proxy = self.conf.getProxy()
+            self.downloader = Downloader(bid, name, proxy[0], proxy[1], proxy[2])
             self.downloader.bind(Downloader.ON_STOP, self.cbStop)
             self.downloader.bind(Downloader.EVT_LOG, self.cbLog)
             self.downloader.bind(Downloader.EVT_PROG, self.cbProgress)
