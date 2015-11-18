@@ -1,6 +1,6 @@
 __author__ = 'vin@misday.com'
 
-from vincore import SqliteHelp
+from pyvin.core import SqliteHelp
 
 class Persist(SqliteHelp):
     DB_NAME = 'data.db'

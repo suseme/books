@@ -3,7 +3,7 @@ __author__ = 'vin@misday.com'
 
 import sys, os
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
-from duoLog import Log
+from pyvin.core import Log
 
 class DuoPdf:
     def __init__(self, scr = None):

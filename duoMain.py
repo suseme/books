@@ -1,10 +1,10 @@
 __author__ = 'vin@misday.com'
 
 import os, webbrowser, ConfigParser
-from vincore import Commading
+from pyvin.core import Commading
 from duoPdf import DuoPdf
 from duoPersist import Persist
-from duoLog import Log
+from pyvin.core import Log
 
 class Duokan:
     def __init__(self):
