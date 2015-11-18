@@ -1,7 +1,7 @@
 __author__ = 'vin@misday.com'
 
 import os, webbrowser, ConfigParser
-from spider import Callbacks, Commading
+from vincore import Commading
 from duoPdf import DuoPdf
 from duoPersist import Persist
 from duoLog import Log

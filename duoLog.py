@@ -1,6 +1,6 @@
 __author__ = 'vin@misday.com'
 
-from spider import Callbacks
+from vincore import Callbacks
 
 class Log(Callbacks):
     @staticmethod

@@ -1,6 +1,6 @@
 __author__ = 'vin@misday.com'
 
-from spider import SqliteHelp
+from vincore import SqliteHelp
 
 class Persist(SqliteHelp):
     DB_NAME = 'data.db'

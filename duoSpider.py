@@ -4,7 +4,8 @@ import sys, re, os, wx
 from datetime import *
 from urlparse import urlparse
 from bs4 import BeautifulSoup
-from spider import Spider, Callbacks
+from spider import Spider
+from vincore import Callbacks
 
 reload(sys)
 sys.setdefaultencoding('utf8')

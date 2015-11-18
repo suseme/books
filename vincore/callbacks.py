@@ -16,10 +16,13 @@ class Callbacks():
             self.handler[event] = handler
 
     def dispatch(self, *args, **kwargs):
+        # print 'dispatch'
+        # print args
         if len(args) > 0:
             event = args[0]
             if self.handler.has_key(event):
-                self.handler[event](*args, **kwargs)
+                # print self.handler[event]
+                return self.handler[event](*args, **kwargs)
         else:
             print 'error: no event'
 

@@ -3,10 +3,6 @@ __author__ = 'vin@misday.com'
 import os, sys, urllib, codecs
 from datetime import *
 
-from .callbacks import Callbacks
-from .commanding import Commading
-from .sqlitehelp import SqliteHelp
-
 reload(sys)
 sys.setdefaultencoding('utf8')
 
