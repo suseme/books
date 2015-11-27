@@ -59,6 +59,7 @@ class Duokan:
             if title:
                 newName =  '%s%s' % (title, extname)
                 os.rename(os.path.join(path, item), os.path.join(path, newName))
+                Log.i('%s -> %s' % (item, newName))
 
     def openNewFolder(self):
         path = os.path.join(os.path.curdir, 'books', 'new')

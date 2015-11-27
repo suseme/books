@@ -5,6 +5,7 @@ __author__ = 'vin@misday.com'
 
 import os
 import wx
+from pyvin import ux
 from duoSpider import Special
 from duoMain import Duokan, Downloader, Config
 
@@ -221,89 +222,39 @@ class MainWindow(wx.Frame):
 
     def onCleanTmp(self, event):
         self.duokan.cleanTmp()
+        ux.showMsg(self, 'Finished', 'Clear tmp folder')
 
     def onRenameAll(self, event):
         self.duokan.renameAll()
+        ux.showMsg(self, 'Finished', 'Rename All')
 
     def onMergeSingle(self, event):
-        file_wildcard = "Pdf files(*.pdf)|*.pdf"
-        dlg = wx.DirDialog(self,
-                            'Open dir to merge',
-                            os.path.join(os.getcwd(), 'tmp'),
-                            style = wx.OPEN,
-                            )
-        if dlg.ShowModal() == wx.ID_OK:
-            filePath = dlg.GetPath()
-            # print filePath
+        # file_wildcard = "Pdf files(*.pdf)|*.pdf"
+        ret, filePath = ux.showDirDlg(self, 'Open dir to merge', os.path.join(os.getcwd(), 'tmp'))
+        if ret and filePath:
             self.duokan.mergeSingle(filePath)
-            retDlg = wx.MessageDialog(self,
-                                    'Finished!',
-                                    'Merge single',
-                                    wx.OK)
-            retDlg.ShowModal()
-            retDlg.Destroy()
-        dlg.Destroy()
-
+            ux.showMsg(self, 'Finished!', 'Merge single')
 
     def onCropSingle(self, event):
         file_wildcard = "Pdf files(*.pdf)|*.pdf"
-        dlg = wx.FileDialog(self,
-                            'Open file to crop',
-                            os.path.join(os.getcwd(), 'books'),
-                            style = wx.OPEN,
-                            wildcard = file_wildcard
-                            )
-        if dlg.ShowModal() == wx.ID_OK:
-            filePath = dlg.GetPath()
-            # print filePath
+        ret, filePath = ux.showFileDlg(self, 'Open file to crop', os.path.join(os.getcwd(), 'books'), file_wildcard)
+        if ret and filePath:
             self.duokan.cropSingle(filePath)
-            retDlg = wx.MessageDialog(self,
-                                    'Finished!',
-                                    'Crop single',
-                                    wx.OK)
-            retDlg.ShowModal()
-            retDlg.Destroy()
-        dlg.Destroy()
+            ux.showMsg(self,  'Finished!', 'Crop single')
 
     def onCrop4Print(self, event):
         file_wildcard = "Pdf files(*.pdf)|*.pdf"
-        dlg = wx.FileDialog(self,
-                            'Open file to crop for printing',
-                            os.path.join(os.getcwd(), 'books'),
-                            style = wx.OPEN,
-                            wildcard = file_wildcard
-                            )
-        if dlg.ShowModal() == wx.ID_OK:
-            filePath = dlg.GetPath()
-            print filePath
+        ret, filePath = ux.showFileDlg(self, 'Open file to crop for printing', os.path.join(os.getcwd(), 'books'), file_wildcard)
+        if ret and filePath:
             self.duokan.crop4Print(filePath)
-            retDlg = wx.MessageDialog(self,
-                                    'Finished!',
-                                    'Crop for printing',
-                                    wx.OK)
-            retDlg.ShowModal()
-            retDlg.Destroy()
-        dlg.Destroy()
+            ux.showMsg(self,  'Finished!', 'Crop for printing')
 
     def onCrop4Kindle(self, event):
         file_wildcard = "Pdf files(*.pdf)|*.pdf"
-        dlg = wx.FileDialog(self,
-                            'Open file to crop for kindle',
-                            os.path.join(os.getcwd(), 'books'),
-                            style = wx.OPEN,
-                            wildcard = file_wildcard
-                            )
-        if dlg.ShowModal() == wx.ID_OK:
-            filePath = dlg.GetPath()
-            print filePath
+        ret, filePath = ux.showFileDlg(self, 'Open file to crop for printing', os.path.join(os.getcwd(), 'books'), file_wildcard)
+        if ret and filePath:
             self.duokan.crop4Kindle(filePath)
-            retDlg = wx.MessageDialog(self,
-                                    'Finished!',
-                                    'Crop for kindle',
-                                    wx.OK)
-            retDlg.ShowModal()
-            retDlg.Destroy()
-        dlg.Destroy()
+            ux.showMsg(self,  'Finished!', 'Crop for kindle')
 
     # download a book
     def onDownloadItem(self,event):

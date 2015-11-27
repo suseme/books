@@ -202,10 +202,53 @@ var _isPicLoaded = function(callback) {
     }
 };
 
-page.onResourceRequested = function(request) {
-    if (_isMatchedUrl(request.url)) {
+String.prototype.startWith = function(s) {
+    if (s == null || s == "" || this.length == 0 || s.length > this.length) {
+        return false;
+    }
+
+    if (this.substr(0, s.length) == s) {
+        return true;
+    } else {
+        return false;
+    }
+
+    return true;
+ };
+
+var _isImg2Ignore = function(url) {
+    var url1 = "http://www.duokan.com/reader/www/images/beta.png";
+    var url2 = "http://www.duokan.com/reader/www/images/reader-loading.png";
+    var url3 = "http://www.duokan.com/reader/www/images/loading.gif";
+    var url4 = "http://www.duokan.com/reader/www/images/reader.png";
+    var url5 = "http://www.duokan.com/reader/www/images/shadow1.png";
+    var url6 = "http://hm.baidu.com/hm.gif";
+
+//    if (url.startWith(url1)) { return true; }
+//    if (url.startWith(url2)) { return true; }
+//    if (url.startWith(url3)) { return true; }
+//    if (url.startWith(url4)) { return true; }
+    if (url.startWith(url5)) { return true; }
+    if (url.startWith(url6)) { return true; }
+
+    return false;
+};
+
+page.onResourceRequested = function(requestData, request) {
+    var url = requestData['url']
+
+    console.log(url)
+
+    if (_isImg2Ignore(url)) {
+         console.log("--- " + url)
+         request.abort()
+         return
+    }
+
+    if (_isMatchedUrl(requestData.url)) {
         //console.log("requested: " + request.url);
-        _pics[request.url] = true;
+        _pics[requestData.url] = true;
+        console.log("+ " + requestData.url)
     }
 };
 page.onResourceReceived = function(response) {
@@ -213,6 +256,7 @@ page.onResourceReceived = function(response) {
         //console.log("received: " + response.url);
         if(_pics[response.url]){
             delete _pics[response.url];
+            console.log("- " + response.url)
         }
     }
 };
