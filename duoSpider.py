@@ -22,12 +22,15 @@ class Special(Callbacks):
 		self.links = {}
 		self.authors = {}
 
-		self.callbacks = {'http://www.duokan.com/special':self.findBooks, 'http://www.duokan.com/book':self.findBook, 'http://www.duokan.com':self.findLinks}
+		self.callbacks = {'http://www.duokan.com/special':self.findBooks,
+						  'http://www.duokan.com/book':self.findBook,
+						  'http://www.duokan.com':self.findLinks,
+						  'http://www.duokan.com/r/%E5%85%8D%E8%B4%B9%E4%B8%93%E5%8C%BA':self.finfLimitFree}
 		self.spider = Spider('Duokan Special')
 		if len(proxyHost) > 0:
 			self.spider.set_proxy(proxyHost, proxyAuthUser, proxyAuthPswd)
 		self.spider.add_callbacks(self.callbacks)
-		self.spider.add_urls([Special.siteRoot])
+		self.spider.add_urls([Special.siteRoot, 'http://www.duokan.com/r/%E5%85%8D%E8%B4%B9%E4%B8%93%E5%8C%BA'])
 
 	def findLinks(self, url, response):
 		self.soup = BeautifulSoup(response, from_encoding='utf8')
@@ -41,9 +44,21 @@ class Special(Callbacks):
 			self.spider.add_urls(link)
 			self.dispatch(Special.EVT_FIND_LINK, link[0])
 			# limit free buy
-			link = links[2]
+			# link = links[2]
+			# link = [Special.siteRoot + link['href']]
+			# self.spider.add_urls(link)
+
+	def finfLimitFree(self, url, response):
+		self.soup = BeautifulSoup(response, from_encoding='utf8')
+		list_nodes = self.soup.findAll('li', attrs={'class':'u-bookitm1 j-bookitm'})
+		if len(list_nodes) > 0:
+			list_node = list_nodes[0]
+			links = list_node.findAll('a')
+			# limit free read
+			link = links[0]
 			link = [Special.siteRoot + link['href']]
 			self.spider.add_urls(link)
+			self.dispatch(Special.EVT_FIND_LINK, link[0])
 
 	def findBooks(self, url, response):
 		self.soup = BeautifulSoup(response, from_encoding='utf8')

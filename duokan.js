@@ -110,6 +110,16 @@ var _nextPage = function() {
     });
 };
 
+var _setBgColor = function(page) {
+    page.evaluate(function() {
+        $('.wrap').css("background-color","#FFFFFF");
+        $('.m-reader').css("background-color","#FFFFFF");
+        $('.rd_cnt').css("background-color","#FFFFFF");
+        $('.book_page_wrapper').css("background-color","#FFFFFF");
+        $('.j-md-book').css("background-color","#FFFFFF");
+    });
+}
+
 var _setClipRect = function(page) {
     var rect = page.evaluate(function() {
         return $('.j-md-book')[0].getBoundingClientRect();
@@ -140,6 +150,7 @@ var _renderBook = function() {
             _closeHelper();
             var pageNum = _getPageNum();
             var fileName = FOLDER + '/' + pageNum + '.pdf';
+            _setBgColor(page);
             _setClipRect(page);
             page.render(fileName);
             //console.log(fileName);
