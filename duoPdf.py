@@ -1,7 +1,7 @@
 
 __author__ = 'vin@misday.com'
 
-import sys, os
+import sys, os, traceback
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
 from pyvin.core import Log
 
@@ -11,7 +11,7 @@ class DuoPdf:
 
     @staticmethod
     def crop(dest, src, left, top, bottom, right):
-        Log.i('cropping file [%s]' % (src, ))
+        Log.i(DuoPdf.__name__, 'cropping file [%s]' % (src, ))
         margin = (left, top, bottom, right)
 
         srcFile = file(src, 'rb')
@@ -26,16 +26,16 @@ class DuoPdf:
             box.lowerLeft  = (box.getLowerLeft_x()  + margin[0], box.getLowerLeft_y()  + margin[1])
 
             destPdf.addPage(page)
-        Log.i('saving to file [%s]...' % (dest, ))
+        Log.i(DuoPdf.__name__, 'saving to file [%s]...' % (dest, ))
         destFile = file(dest, 'wb')
         destPdf.write(destFile)
         destFile.close()
         srcFile.close()
-        Log.i('done')
+        Log.i(DuoPdf.__name__, 'done')
 
     @staticmethod
     def crop2(dest, src, margin1, margin2):
-        Log.i('cropping file [%s]' % (src, ))
+        Log.i(DuoPdf.__name__, 'cropping file [%s]' % (src, ))
 
         srcFile = file(src, 'rb')
         srcPdf = PdfFileReader(srcFile)
@@ -56,16 +56,16 @@ class DuoPdf:
 
             destPdf.addPage(page)
             index += 1
-        Log.i('saving to file [%s]...' % (dest, ))
+        Log.i(DuoPdf.__name__, 'saving to file [%s]...' % (dest, ))
         destFile = file(dest, 'wb')
         destPdf.write(destFile)
         destFile.close()
         srcFile.close()
-        Log.i('done')
+        Log.i(DuoPdf.__name__, 'done')
 
     @staticmethod
     def cropWH(dest, src, destWidth, destHeight):
-        Log.i('cropping file [%s]' % (src, ))
+        Log.i(DuoPdf.__name__, 'cropping file [%s]' % (src, ))
 
         srcFile = file(src, 'rb')
         srcPdf = PdfFileReader(srcFile)
@@ -80,12 +80,12 @@ class DuoPdf:
             box.lowerLeft  = (0, (height - destHeight) / 2)
 
             destPdf.addPage(page)
-        Log.i('saving to file [%s]...' % (dest, ))
+        Log.i(DuoPdf.__name__, 'saving to file [%s]...' % (dest, ))
         destFile = file(dest, 'wb')
         destPdf.write(destFile)
         destFile.close()
         srcFile.close()
-        Log.i('done')
+        Log.i(DuoPdf.__name__, 'done')
 
     @staticmethod
     def merge(dest, srcDir):
@@ -96,30 +96,27 @@ class DuoPdf:
                 merger = PdfFileMerger()
                 position = 0
                 for f in files:
-                    Log.i('merge file [%s]' % (f, ))
+                    Log.i(DuoPdf.__name__, 'merge file [%s]' % (f, ))
                     filePath = os.path.join(srcDir, f)
                     if (os.path.isfile(filePath)):
                         try:
                             srcFileHdl = open(filePath, 'rb')
                             merger.merge(position=position, fileobj=srcFileHdl)
                         except:
-                            Log.w('merge [%s] failed' % (filePath))
+                            Log.w(DuoPdf.__name__, 'merge [%s] failed' % (filePath))
+                            traceback.print_exc()
                     else:
-                        Log.i('skip file [%s]' % (filePath,))
+                        Log.i(DuoPdf.__name__, 'skip file [%s]' % (filePath,))
                     position += 1
-                Log.i('save to file [%s]...' % (dest, ))
+                Log.i(DuoPdf.__name__, 'save to file [%s]...' % (dest, ))
                 destFileStream = file(dest, 'wb')
                 merger.write(destFileStream)
                 destFileStream.close()
-                Log.i('done')
+                Log.i(DuoPdf.__name__, 'done')
             else:
-                Log.w('no file in [%s] to merge' % (srcDir))
+                Log.w(DuoPdf.__name__, 'no file in [%s] to merge' % (srcDir))
         else:
-            Log.w('dir [%s] not exist.' % (srcDir,))
-
-
-
-
+            Log.w(DuoPdf.__name__, 'dir [%s] not exist.' % (srcDir,))
 
 if __name__ == '__main__':
     src = sys.argv[1]

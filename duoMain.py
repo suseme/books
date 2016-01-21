@@ -1,6 +1,6 @@
 __author__ = 'vin@misday.com'
 
-import os, webbrowser, ConfigParser
+import os, webbrowser, ConfigParser, traceback
 from pyvin.core import Commading
 from duoPdf import DuoPdf
 from duoPersist import Persist
@@ -8,6 +8,7 @@ from pyvin.core import Log
 
 class Duokan:
     def __init__(self):
+        self.TAG = Duokan.__name__
         Duokan.ensureDir(os.path.join(os.path.curdir, 'tmp'))
         Duokan.ensureDir(os.path.join(os.path.curdir, 'books'))
         Duokan.ensureDir(os.path.join(os.path.curdir, 'books', 'new'))
@@ -25,14 +26,14 @@ class Duokan:
         if len(url) > 0:
             webbrowser.open(url, new=2, autoraise=True)
         else:
-            Log.e('url is empty')
+            Log.e(self.TAG, 'url is empty')
 
     def cleanTmp(self):
         '''clean the tmp dir'''
         path = os.path.join(os.path.curdir, 'tmp')
         for item in os.listdir(path):
             filename = os.path.join(path, item)
-            Log.e('deleting %s' % (filename, ))
+            Log.e(self.TAG, 'deleting %s' % (filename, ))
             self.deleteFileFolder(filename)
 
     def deleteFileFolder(self, src):
@@ -41,7 +42,7 @@ class Duokan:
             try:
                 os.remove(src)
             except:
-                Log.e('delete [%s] failed...' % (src, ))
+                Log.e(self.TAG, 'delete [%s] failed...' % (src, ))
         elif os.path.isdir(src):
             for item in os.listdir(src):
                 itemsrc=os.path.join(src,item)
@@ -59,7 +60,7 @@ class Duokan:
             if title:
                 newName =  '%s%s' % (title, extname)
                 os.rename(os.path.join(path, item), os.path.join(path, newName))
-                Log.i('%s -> %s' % (item, newName))
+                Log.i(self.TAG, '%s -> %s' % (item, newName))
 
     def openNewFolder(self):
         path = os.path.join(os.path.curdir, 'books', 'new')
@@ -81,7 +82,7 @@ class Duokan:
     @staticmethod
     def mergeSingle(src):
         if not os.path.isdir(src):
-            Log.w('[%s] is not a diractory, exit...' % (src, ))
+            Log.w(Duokan.__name__, '[%s] is not a diractory, exit...' % (src, ))
             return
         path = os.path.split(src)
         id = path[1]
@@ -134,6 +135,7 @@ class Downloader(Commading):
 
     def __init__(self, bid, name, proxyHost='', proxyAuthUser='', proxyAuthPswd=''):
         '''phantomjs --proxy=host --proxy-auth=username:password duokan.js %1 %ddd%/%2 4'''
+        self.TAG = Downloader.__name__
         cmd = ['phantomjs',]
         if len(proxyHost) > 0:
             cmd.append('--proxy=%s' % (proxyHost, ))
@@ -154,12 +156,12 @@ class Downloader(Commading):
         self.id = bid
 
     def onStop(self, event):
-        Log.i('phantomjs finished...')
+        Log.i(self.TAG, 'phantomjs finished...')
         self.persist.setDownload(self.id)
         Duokan.merge(self.id)
-        Log.i('merged pdf...')
+        Log.i(self.TAG, 'merged pdf...')
         Duokan.crop(self.id)
-        Log.i('croped pdf...')
+        Log.i(self.TAG, 'croped pdf...')
         self.dispatch(Downloader.EVT_STOP)
 
     def onLog(self, event, str):
@@ -181,6 +183,7 @@ class Config:
     KEY_PROXY_PAWD = 'pswd'
 
     def __init__(self, name = 'config.conf'):
+        self.TAG = Config.__name__
         self.conf = ConfigParser.ConfigParser()
         self.conf.read(name)
 
@@ -195,7 +198,8 @@ class Config:
             self.user = self.conf.get(Config.KEY_PROXY, Config.KEY_PROXY_USER)
             self.pswd = self.conf.get(Config.KEY_PROXY, Config.KEY_PROXY_PAWD)
         except:
-            Log.w('read proxy failed')
+            Log.w(self.TAG, 'read proxy failed')
+            traceback.print_exc()
 
     def getProxy(self):
         return (self.host, self.user, self.pswd)
