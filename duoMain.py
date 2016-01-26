@@ -50,7 +50,7 @@ class Duokan:
             try:
                 os.rmdir(src)
             except:
-                Log.e('delete [%s] failed...' % (src, ))
+                Log.e(self.TAG, 'delete [%s] failed...' % (src, ))
 
     def renameAll(self):
         path = os.path.join(os.path.curdir, 'books', 'new')

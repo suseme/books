@@ -7,6 +7,7 @@ from pyvin.core import Log
 
 class DuoPdf:
     def __init__(self, scr = None):
+        self.TAG = DuoPdf.__name__
         pass
 
     @staticmethod
