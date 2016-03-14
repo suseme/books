@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'res\main.ui'
 #
-# Created: Mon Mar 14 16:53:01 2016
+# Created: Mon Mar 14 17:04:47 2016
 #      by: PyQt4 UI code generator 4.11.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -57,6 +57,7 @@ class Ui_MainWindow(object):
         item = QtGui.QTableWidgetItem()
         self.tableWidget_books.setHorizontalHeaderItem(4, item)
         self.tableWidget_books.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget_books.verticalHeader().setHighlightSections(False)
         self.tableWidget_books.verticalHeader().setStretchLastSection(True)
         self.gridLayout.addWidget(self.tableWidget_books, 2, 0, 1, 1)
         self.horizontalLayout = QtGui.QHBoxLayout()
