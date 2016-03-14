@@ -327,6 +327,11 @@ class MainWindow(wx.Frame):
         wx.CallAfter(self.gauge.SetValue, 100)
         self.list.SetItemBackgroundColour(self.downloadIdx, MainWindow.BG_DOWN)
 
+        # rename
+        id = self.list.GetItemText(self.downloadIdx, MainWindow.COLUMN_ID)
+        title = self.list.GetItemText(self.downloadIdx, MainWindow.COLUMN_TITLE)
+        self.duokan.rename(id, title)
+
         # start next
         self.downloadIdx += 1
         self.startDownload()

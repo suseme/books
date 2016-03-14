@@ -248,10 +248,10 @@ var _isImg2Ignore = function(url) {
 page.onResourceRequested = function(requestData, request) {
     var url = requestData['url']
 
-    console.log(url)
+    // console.log(url)
 
     if (_isImg2Ignore(url)) {
-         console.log("--- " + url)
+         // console.log("--- " + url)
          request.abort()
          return
     }
@@ -259,7 +259,7 @@ page.onResourceRequested = function(requestData, request) {
     if (_isMatchedUrl(requestData.url)) {
         //console.log("requested: " + request.url);
         _pics[requestData.url] = true;
-        console.log("+ " + requestData.url)
+        // console.log("+ " + requestData.url)
     }
 };
 page.onResourceReceived = function(response) {
@@ -267,7 +267,7 @@ page.onResourceReceived = function(response) {
         //console.log("received: " + response.url);
         if(_pics[response.url]){
             delete _pics[response.url];
-            console.log("- " + response.url)
+            // console.log("- " + response.url)
         }
     }
 };

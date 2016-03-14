@@ -26,12 +26,15 @@ class Special(Callbacks):
         self.callbacks = {'http://www.duokan.com/special': self.findBooks,
                           'http://www.duokan.com/book': self.findBook,
                           'http://www.duokan.com': self.findLinks,
-                          'http://www.duokan.com/r/%E5%85%8D%E8%B4%B9%E4%B8%93%E5%8C%BA': self.finfLimitFree}
+                          # 'http://www.duokan.com/r/%E5%85%8D%E8%B4%B9%E4%B8%93%E5%8C%BA': self.finfLimitFree,
+                          }
         self.spider = Spider('Duokan Special')
         if len(proxyHost) > 0:
             self.spider.set_proxy(proxyHost, proxyAuthUser, proxyAuthPswd)
         self.spider.add_callbacks(self.callbacks)
-        self.spider.add_urls([Special.siteRoot, 'http://www.duokan.com/r/%E5%85%8D%E8%B4%B9%E4%B8%93%E5%8C%BA'])
+        self.spider.add_urls([Special.siteRoot,
+                              # 'http://www.duokan.com/r/%E5%85%8D%E8%B4%B9%E4%B8%93%E5%8C%BA'
+                              ])
 
     def findLinks(self, url, response):
         self.soup = BeautifulSoup(response, from_encoding='utf8')

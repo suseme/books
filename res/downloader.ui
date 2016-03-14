@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>576</width>
+    <height>175</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_id"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_name"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_start">
+       <property name="text">
+        <string>Start</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/img/Download_73.119383825417px_1183408_easyicon.net.png</normaloff>:/img/Download_73.119383825417px_1183408_easyicon.net.png</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QProgressBar" name="progressBar">
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="textDirection">
+      <enum>QProgressBar::TopToBottom</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QTextEdit" name="textEdit"/>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pushButton_start</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Dialog</receiver>
+   <slot>do_start(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>528</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Dialog</sender>
+   <signal>when_message(QString)</signal>
+   <receiver>textEdit</receiver>
+   <slot>append(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Dialog</sender>
+   <signal>when_id(QString)</signal>
+   <receiver>lineEdit_id</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>131</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Dialog</sender>
+   <signal>when_name(QString)</signal>
+   <receiver>lineEdit_name</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Dialog</sender>
+   <signal>when_progress(int)</signal>
+   <receiver>progressBar</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>51</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Dialog</sender>
+   <signal>finished(int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>do_stop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Dialog</sender>
+   <signal>when_title(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>setWindowTitle(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>when_id(QString)</signal>
+  <signal>when_name(QString)</signal>
+  <signal>when_progress(int)</signal>
+  <signal>when_message(QString)</signal>
+  <signal>when_title(QString)</signal>
+  <slot>do_start(bool)</slot>
+  <slot>do_stop()</slot>
+  <slot>slot1()</slot>
+ </slots>
+</ui>

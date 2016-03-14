@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>565</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/img/icon-64.png</normaloff>:/img/icon-64.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="0">
+     <widget class="QTextEdit" name="textEdit_logging"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QTableWidget" name="tableWidget_books">
+      <property name="contextMenuPolicy">
+       <enum>Qt::ActionsContextMenu</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>TITLE</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>AUTHOR</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>LINK</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>PROGRESS</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Secial Books</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_specialUrl"/>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>565</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionUpdate"/>
+    <addaction name="actionDownloadAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpenInBrowser"/>
+    <addaction name="actionOpenBooksFolder"/>
+    <addaction name="separator"/>
+    <addaction name="actionPowe_OffAfterFinish"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionClean_Temp_Folder"/>
+    <addaction name="actionRename_All"/>
+    <addaction name="separator"/>
+    <addaction name="actionMerge"/>
+    <addaction name="actionCrop"/>
+    <addaction name="separator"/>
+    <addaction name="actionCrop_4print"/>
+    <addaction name="actionCrop_4kindle"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionUpdate"/>
+   <addaction name="actionDownloadAll"/>
+   <addaction name="actionOpenInBrowser"/>
+   <addaction name="separator"/>
+   <addaction name="actionOpenBooksFolder"/>
+   <addaction name="actionClean_Temp_Folder"/>
+   <addaction name="actionRename_All"/>
+   <addaction name="separator"/>
+   <addaction name="actionCrop"/>
+   <addaction name="actionMerge"/>
+   <addaction name="separator"/>
+   <addaction name="actionCrop_4print"/>
+   <addaction name="actionCrop_4kindle"/>
+  </widget>
+  <action name="actionUpdate">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/find_60.631578947368px_1148151_easyicon.net.png</normaloff>:/img/find_60.631578947368px_1148151_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Update</string>
+   </property>
+   <property name="toolTip">
+    <string>Update special list</string>
+   </property>
+  </action>
+  <action name="actionDownloadAll">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/Download_73.119383825417px_1183408_easyicon.net.png</normaloff>:/img/Download_73.119383825417px_1183408_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Download All</string>
+   </property>
+  </action>
+  <action name="actionOpenInBrowser">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/globe_search_63.667532467532px_1192123_easyicon.net.png</normaloff>:/img/globe_search_63.667532467532px_1192123_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open In Browser</string>
+   </property>
+   <property name="toolTip">
+    <string>Open Special In Browser</string>
+   </property>
+  </action>
+  <action name="actionOpenBooksFolder">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/folder_documents_64px_1072317_easyicon.net.png</normaloff>:/img/folder_documents_64px_1072317_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open Books Folder</string>
+   </property>
+  </action>
+  <action name="actionPowe_OffAfterFinish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Power Off After Finish</string>
+   </property>
+   <property name="toolTip">
+    <string>Set Power Off After Finish</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionClean_Temp_Folder">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/Delete_64px_1183403_easyicon.net.png</normaloff>:/img/Delete_64px_1183403_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clean Temp Folder</string>
+   </property>
+  </action>
+  <action name="actionRename_All">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/rename_64px_1125671_easyicon.net.png</normaloff>:/img/rename_64px_1125671_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rename All</string>
+   </property>
+  </action>
+  <action name="actionMerge">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/flow_merge_51.250996015936px_1158617_easyicon.net.png</normaloff>:/img/flow_merge_51.250996015936px_1158617_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Merge</string>
+   </property>
+  </action>
+  <action name="actionCrop">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/Crop_64px_1177465_easyicon.net.png</normaloff>:/img/Crop_64px_1177465_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Crop</string>
+   </property>
+   <property name="toolTip">
+    <string>Crop a singal book</string>
+   </property>
+  </action>
+  <action name="actionCrop_4print">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/print_73.226993865031px_1187925_easyicon.net.png</normaloff>:/img/print_73.226993865031px_1187925_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Crop For Printing</string>
+   </property>
+  </action>
+  <action name="actionCrop_4kindle">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/kindle_64px_1099796_easyicon.net.png</normaloff>:/img/kindle_64px_1099796_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Crop For Kindle</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="action_list_view_in_browser">
+   <property name="text">
+    <string>View In Browser</string>
+   </property>
+  </action>
+  <action name="action_list_download">
+   <property name="text">
+    <string>Download</string>
+   </property>
+  </action>
+  <action name="action_list_remove">
+   <property name="text">
+    <string>Remove</string>
+   </property>
+  </action>
+  <action name="action_list_merge">
+   <property name="text">
+    <string>Merge</string>
+   </property>
+  </action>
+  <action name="action_list_crop">
+   <property name="text">
+    <string>Crop</string>
+   </property>
+  </action>
+  <action name="action_list_rename">
+   <property name="text">
+    <string>Rename</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionUpdate</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDownloadAll</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_download_all()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpenInBrowser</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_open_special_in_browser()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpenBooksFolder</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_open_books_folder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClean_Temp_Folder</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_clean_tmp_folder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRename_All</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_rename_all()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCrop</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_crop_book()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMerge</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_merge_book()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCrop_4print</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_crop_4print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCrop_4kindle</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_crop_4kindle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPowe_OffAfterFinish</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_power_off_setting(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_list_view_in_browser</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_list_view_in_browser()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_list_download</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_list_download()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_list_remove</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_list_remove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_list_merge</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_list_merge()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_list_crop</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_list_crop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_list_rename</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_list_rename()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>when_add_book(int)</signal>
+   <receiver>tableWidget_books</receiver>
+   <slot>insertRow(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>when_del_book(int)</signal>
+   <receiver>tableWidget_books</receiver>
+   <slot>removeRow(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>when_special_url(QString)</signal>
+   <receiver>lineEdit_specialUrl</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>321</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>when_logging(QString)</signal>
+   <receiver>textEdit_logging</receiver>
+   <slot>append(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>481</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>when_status(QString)</signal>
+   <receiver>statusbar</receiver>
+   <slot>showMessage(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>628</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>when_progress(int)</signal>
+   <receiver>progressBar</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget_books</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_list_dclick(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>240</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>destroyed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_destroyed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>when_logging(QString)</signal>
+  <signal>when_special_url(QString)</signal>
+  <signal>when_status(QString)</signal>
+  <signal>when_add_book(int)</signal>
+  <signal>when_del_book(int)</signal>
+  <signal>when_progress(int)</signal>
+  <slot>do_update()</slot>
+  <slot>do_download_all()</slot>
+  <slot>do_open_special_in_browser()</slot>
+  <slot>do_open_books_folder()</slot>
+  <slot>do_clean_tmp_folder()</slot>
+  <slot>do_rename_all()</slot>
+  <slot>do_crop_book()</slot>
+  <slot>do_merge_book()</slot>
+  <slot>do_crop_4print()</slot>
+  <slot>do_crop_4kindle()</slot>
+  <slot>on_power_off_setting(bool)</slot>
+  <slot>on_book_dclick(int,int)</slot>
+  <slot>do_list_view_in_browser()</slot>
+  <slot>do_list_download()</slot>
+  <slot>do_list_remove()</slot>
+  <slot>do_list_merge()</slot>
+  <slot>do_list_crop()</slot>
+  <slot>do_list_rename()</slot>
+  <slot>do_list_dclick(int,int)</slot>
+  <slot>do_destroyed()</slot>
+ </slots>
+</ui>
