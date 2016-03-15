@@ -46,7 +46,7 @@
        <bool>false</bool>
       </attribute>
       <attribute name="verticalHeaderStretchLastSection">
-       <bool>true</bool>
+       <bool>false</bool>
       </attribute>
       <column>
        <property name="text">
@@ -156,8 +156,11 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionUpdate"/>
-   <addaction name="actionDownloadAll"/>
+   <addaction name="actionUpdateStop"/>
    <addaction name="actionOpenInBrowser"/>
+   <addaction name="separator"/>
+   <addaction name="actionDownloadAll"/>
+   <addaction name="actionDownloadStop"/>
    <addaction name="separator"/>
    <addaction name="actionOpenBooksFolder"/>
    <addaction name="actionClean_Temp_Folder"/>
@@ -230,7 +233,7 @@
   <action name="actionClean_Temp_Folder">
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/img/Delete_64px_1183403_easyicon.net.png</normaloff>:/img/Delete_64px_1183403_easyicon.net.png</iconset>
+     <normaloff>:/img/delete_64px_1160129_easyicon.net.png</normaloff>:/img/delete_64px_1160129_easyicon.net.png</iconset>
    </property>
    <property name="text">
     <string>Clean Temp Folder</string>
@@ -317,6 +320,30 @@
   <action name="action_list_rename">
    <property name="text">
     <string>Rename</string>
+   </property>
+  </action>
+  <action name="actionUpdateStop">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/Stop_64px_1183587_easyicon.net.png</normaloff>:/img/Stop_64px_1183587_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>UpdateStop</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop update special</string>
+   </property>
+  </action>
+  <action name="actionDownloadStop">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/stop_64px_1183450_easyicon.net.png</normaloff>:/img/stop_64px_1183450_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>DownloadStop</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop download</string>
    </property>
   </action>
  </widget>
@@ -740,6 +767,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionUpdateStop</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_update_stop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDownloadStop</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_download_stop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>when_logging(QString)</signal>
@@ -768,5 +827,7 @@
   <slot>do_list_rename()</slot>
   <slot>do_list_dclick(int,int)</slot>
   <slot>do_destroyed()</slot>
+  <slot>do_update_stop()</slot>
+  <slot>do_download_stop()</slot>
  </slots>
 </ui>

@@ -127,6 +127,9 @@ class Special(Callbacks):
     def start(self):
         self.spider.start()
 
+    def stop(self):
+        self.spider.stop()
+
     def getTitle(self):
         return self.titles
 

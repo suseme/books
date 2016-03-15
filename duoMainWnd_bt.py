@@ -19,6 +19,12 @@ except AttributeError:
     def _fromUtf8(s):
         return s
 
+def _fromQString(s):
+    try:
+        return str(s.toUtf8())
+    except:
+        return s
+
 class MainWindow(QMainWindow):
     tsize = (20, 20)
 
@@ -26,8 +32,11 @@ class MainWindow(QMainWindow):
     COLUMNS_WIDTH = [50, 200, 200, 200, 200, 100]
 
     def __init__(self):
-        self.duokan = Duokan()
-        self.conf = Config()
+        self.duokan     = Duokan()
+        self.conf       = Config()
+        self.special    = None
+        self.downloader = None
+        self.powerOff   = False
 
         self.tag = MainWindow.__name__
         super( MainWindow, self ).__init__()
@@ -37,8 +46,6 @@ class MainWindow(QMainWindow):
         self.setupPopup()
 
         self.bindSignal()
-
-        self.powerOff = False
 
     def setupPopup(self):
         self.ui.tableWidget_books.addAction(self.ui.action_list_view_in_browser)
@@ -87,16 +94,10 @@ class MainWindow(QMainWindow):
 
     def adjustListWidth(self):
         self.ui.tableWidget_books.resizeColumnsToContents()
-        # self.list.SetColumnWidth(MainWindow.COLUMN_NUM, wx.LIST_AUTOSIZE)
-        # self.list.SetColumnWidth(MainWindow.COLUMN_ID, wx.LIST_AUTOSIZE)
-        # self.list.SetColumnWidth(MainWindow.COLUMN_TITLE, wx.LIST_AUTOSIZE)
-        # self.list.SetColumnWidth(MainWindow.COLUMN_AUTHOR, wx.LIST_AUTOSIZE)
-        # self.list.SetColumnWidth(MainWindow.COLUMN_LINK, wx.LIST_AUTOSIZE)
-        # self.list.SetColumnWidth(MainWindow.COLUMN_PROGRESS, wx.LIST_AUTOSIZE)
 
     # set download column progress
     def setProgress(self, row, prog):
-        if row < self.ui.tableWidget_books.rowCount():
+        if row >= 0 and row < self.ui.tableWidget_books.rowCount():
             item = self.ui.tableWidget_books.cellWidget(row, MainWindow.COLUMN_PROGRESS)
             item.setValue(prog)
 
@@ -112,14 +113,14 @@ class MainWindow(QMainWindow):
 
     def startDownload(self):
         if self.downloadRow < self.ui.tableWidget_books.rowCount():
-            id = self.ui.tableWidget_books.item(self.downloadRow, MainWindow.COLUMN_ID).text().toUtf8()
+            id = _fromQString(self.ui.tableWidget_books.item(self.downloadRow, MainWindow.COLUMN_ID).text())
             proxy = self.conf.getProxy()
-            self.down = Downloader(id, id, proxy[0], proxy[1], proxy[2])
-            self.down.bind(Downloader.EVT_START, self.cbStart)
-            self.down.bind(Downloader.EVT_STOP,  self.cbStop)
-            self.down.bind(Downloader.EVT_LOG,   self.cbLog)
-            self.down.bind(Downloader.EVT_PROG,  self.cbProgress)
-            self.down.start()
+            self.downloader = Downloader(id, id, proxy[0], proxy[1], proxy[2])
+            self.downloader.bind(Downloader.EVT_START, self.cbStart)
+            self.downloader.bind(Downloader.EVT_STOP, self.cbStop)
+            self.downloader.bind(Downloader.EVT_LOG, self.cbLog)
+            self.downloader.bind(Downloader.EVT_PROG, self.cbProgress)
+            self.downloader.start()
 
     # for downloader
     def cbStart(self, event):
@@ -183,18 +184,28 @@ class MainWindow(QMainWindow):
     def do_update(self):
         self.when_progress(10)
         proxy = self.conf.getProxy()
-        special = Special(proxy[0], proxy[1], proxy[2])
-        special.bind(Special.EVT_FIND_LINK, self.cbAddUrl)
-        special.bind(Special.EVT_FIND_BOOK, self.cbAddBook)
-        special.start()
+        self.special = Special(proxy[0], proxy[1], proxy[2])
+        self.special.bind(Special.EVT_FIND_LINK, self.cbAddUrl)
+        self.special.bind(Special.EVT_FIND_BOOK, self.cbAddBook)
+        self.special.start()
         self.when_progress(100)
+
+    def do_update_stop(self):
+        if self.special:
+            self.special.stop()
+            self.special = None
 
     def do_download_all(self):
         self.downloadRow = 0
         self.startDownload()
 
+    def do_download_stop(self):
+        if self.downloader:
+            self.downloader.stop()
+            self.downloader = None
+
     def do_open_special_in_browser(self):
-        self.duokan.openInNewTab(self.ui.lineEdit_specialUrl.text().toUtf8())
+        self.duokan.openInNewTab(_fromQString(self.ui.lineEdit_specialUrl.text()))
 
     def do_open_books_folder(self):
         '''open books/new folder'''
@@ -218,8 +229,8 @@ class MainWindow(QMainWindow):
     def do_merge_book(self):
         filePath = QFileDialog.getExistingDirectory(self, 'Open file to crop', _fromUtf8(os.path.join(os.getcwd(), 'tmp')))
         if filePath:
-            print filePath.toUtf8()
-            self.duokan.mergeSingle(str(filePath.toUtf8()))
+            print _fromQString(filePath)
+            self.duokan.mergeSingle(_fromQString(filePath))
             self.when_information('Finished!', 'Merge single')
 
     def do_crop_4print(self):
@@ -247,15 +258,15 @@ class MainWindow(QMainWindow):
         ''' open link in browser '''
         row = self.ui.tableWidget_books.currentRow()
         if row != -1:
-            url = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_LINK).text().toUtf8()
+            url = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_LINK).text())
             self.duokan.openInNewTab(url)
 
     def do_list_download(self):
         '''download a book'''
         row = self.ui.tableWidget_books.currentRow()
         if row >=0 and row < self.ui.tableWidget_books.rowCount():
-            id = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text().toUtf8()
-            title = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text().toUtf8()
+            id    = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
+            title = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text())
             dlg = DownloaderDlg(self, self.conf, title)
             dlg.setId(id)
             dlg.setName(id)
@@ -273,14 +284,14 @@ class MainWindow(QMainWindow):
     def do_list_merge(self):
         row = self.ui.tableWidget_books.currentRow()
         if row != -1:
-            id = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text().toUtf8()
+            id = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
             self.duokan.merge(id)
             self.when_information('merge finished')
 
     def do_list_crop(self):
         row = self.ui.tableWidget_books.currentRow()
         if row != -1:
-            id = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text().toUtf8()
+            id = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
             self.duokan.crop(id)
             self.when_information('crop finished')
 
@@ -288,13 +299,13 @@ class MainWindow(QMainWindow):
         ''' rename a item from id to title '''
         row = self.ui.tableWidget_books.currentRow()
         if row != -1:
-            id = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text().toUtf8()
-            title = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text().toUtf8()
+            id    = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
+            title = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text())
             self.duokan.rename(id, title)
             self.when_information('rename finished')
 
     def do_list_dclick(self, row, col):
-        url = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_LINK).text().toUtf8()
+        url = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_LINK).text())
         self.duokan.openInNewTab(url)
 
     # self defined slots ###############################################################################################
@@ -309,17 +320,16 @@ class DownloaderDlg(QDialog):
         super(DownloaderDlg, self).__init__(parent)
 
         self.conf = conf
+        self.downloader = None
 
         self.ui= Ui_Dialog()
         self.ui.setupUi(self)
         self.when_title(tt)
 
-        self.downloader = None
-
     def start(self):
-            title = self.windowTitle().toUtf8()
-            bid = self.ui.lineEdit_id.text().toUtf8()
-            name = self.ui.lineEdit_name.text().toUtf8()
+            title = _fromQString(self.windowTitle())
+            bid   = _fromQString(self.ui.lineEdit_id.text())
+            name  = _fromQString(self.ui.lineEdit_name.text())
 
             self.when_message('Title: %s' % title)
             self.when_message('ID: %s' % bid)
@@ -359,10 +369,10 @@ class DownloaderDlg(QDialog):
         ''' start download process '''
         if checked:
             print 'checked'
-            # self.start()
+            self.start()
         else:
             print 'unchecked'
-            # self.stop()
+            self.stop()
 
     def do_stop(self):
         ''' stop download process '''

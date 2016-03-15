@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'res\main.ui'
 #
-# Created: Mon Mar 14 17:04:47 2016
+# Created: Tue Mar 15 13:05:19 2016
 #      by: PyQt4 UI code generator 4.11.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -58,7 +58,7 @@ class Ui_MainWindow(object):
         self.tableWidget_books.setHorizontalHeaderItem(4, item)
         self.tableWidget_books.horizontalHeader().setStretchLastSection(True)
         self.tableWidget_books.verticalHeader().setHighlightSections(False)
-        self.tableWidget_books.verticalHeader().setStretchLastSection(True)
+        self.tableWidget_books.verticalHeader().setStretchLastSection(False)
         self.gridLayout.addWidget(self.tableWidget_books, 2, 0, 1, 1)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
@@ -117,7 +117,7 @@ class Ui_MainWindow(object):
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
         self.actionClean_Temp_Folder = QtGui.QAction(MainWindow)
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/Delete_64px_1183403_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/delete_64px_1160129_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionClean_Temp_Folder.setIcon(icon5)
         self.actionClean_Temp_Folder.setObjectName(_fromUtf8("actionClean_Temp_Folder"))
         self.actionRename_All = QtGui.QAction(MainWindow)
@@ -159,6 +159,16 @@ class Ui_MainWindow(object):
         self.action_list_crop.setObjectName(_fromUtf8("action_list_crop"))
         self.action_list_rename = QtGui.QAction(MainWindow)
         self.action_list_rename.setObjectName(_fromUtf8("action_list_rename"))
+        self.actionUpdateStop = QtGui.QAction(MainWindow)
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/Stop_64px_1183587_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionUpdateStop.setIcon(icon11)
+        self.actionUpdateStop.setObjectName(_fromUtf8("actionUpdateStop"))
+        self.actionDownloadStop = QtGui.QAction(MainWindow)
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/stop_64px_1183450_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionDownloadStop.setIcon(icon12)
+        self.actionDownloadStop.setObjectName(_fromUtf8("actionDownloadStop"))
         self.menuFile.addAction(self.actionUpdate)
         self.menuFile.addAction(self.actionDownloadAll)
         self.menuFile.addSeparator()
@@ -181,8 +191,11 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
         self.toolBar.addAction(self.actionUpdate)
-        self.toolBar.addAction(self.actionDownloadAll)
+        self.toolBar.addAction(self.actionUpdateStop)
         self.toolBar.addAction(self.actionOpenInBrowser)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionDownloadAll)
+        self.toolBar.addAction(self.actionDownloadStop)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionOpenBooksFolder)
         self.toolBar.addAction(self.actionClean_Temp_Folder)
@@ -221,6 +234,8 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(MainWindow, QtCore.SIGNAL(_fromUtf8("when_progress(int)")), self.progressBar.setValue)
         QtCore.QObject.connect(self.tableWidget_books, QtCore.SIGNAL(_fromUtf8("cellDoubleClicked(int,int)")), MainWindow.do_list_dclick)
         QtCore.QObject.connect(MainWindow, QtCore.SIGNAL(_fromUtf8("destroyed()")), MainWindow.do_destroyed)
+        QtCore.QObject.connect(self.actionUpdateStop, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_update_stop)
+        QtCore.QObject.connect(self.actionDownloadStop, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_download_stop)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -263,6 +278,10 @@ class Ui_MainWindow(object):
         self.action_list_merge.setText(_translate("MainWindow", "Merge", None))
         self.action_list_crop.setText(_translate("MainWindow", "Crop", None))
         self.action_list_rename.setText(_translate("MainWindow", "Rename", None))
+        self.actionUpdateStop.setText(_translate("MainWindow", "UpdateStop", None))
+        self.actionUpdateStop.setToolTip(_translate("MainWindow", "Stop update special", None))
+        self.actionDownloadStop.setText(_translate("MainWindow", "DownloadStop", None))
+        self.actionDownloadStop.setToolTip(_translate("MainWindow", "Stop download", None))
 
 import res_rc
 

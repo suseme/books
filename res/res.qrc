@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="img">
+    <file>stop_64px_1183450_easyicon.net.png</file>
+    <file>Stop_64px_1183587_easyicon.net.png</file>
     <file>find_60.631578947368px_1148151_easyicon.net.png</file>
     <file>flow_merge_51.250996015936px_1158617_easyicon.net.png</file>
     <file>kindle_64px_1099796_easyicon.net.png</file>
@@ -7,8 +9,8 @@
     <file>rename_64px_1125671_easyicon.net.png</file>
     <file>Crop_64px_1177465_easyicon.net.png</file>
     <file>crop_64px_1181784_easyicon.net.png</file>
-    <file>Delete_64px_1183403_easyicon.net.png</file>
     <file>folder_documents_64px_1072317_easyicon.net.png</file>
+    <file>delete_64px_1160129_easyicon.net.png</file>
     <file>globe_search_63.667532467532px_1192123_easyicon.net.png</file>
     <file>icon-64.png</file>
     <file>Search_65.263751763047px_1183445_easyicon.net.png</file>
