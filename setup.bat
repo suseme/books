@@ -1,7 +1,7 @@
 @echo off
 
-REM set py27_dir=D:\bin\Python27
-set py27_dir=C:\Users\rzfwch\bin\Python27
+set py27_dir=D:\bin\Python27
+REM set py27_dir=C:\Users\rzfwch\bin\Python27
 
 if %1 == u goto ui:
 if %1 == r goto res:

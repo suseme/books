@@ -21,12 +21,15 @@ except AttributeError:
 
 def _fromQString(s):
     try:
-        return str(s.toUtf8())
+        return str(s.toLocal8Bit())
     except:
         return s
 
 class MainWindow(QMainWindow):
     tsize = (20, 20)
+
+    BG_FREED = QtGui.QColor(255, 255, 153)
+    BG_DOWN = QtGui.QColor(146, 208, 80)
 
     (COLUMN_ID, COLUMN_TITLE, COLUMN_AUTHOR, COLUMN_LINK, COLUMN_PROGRESS) = range(0, 5)
     COLUMNS_WIDTH = [50, 200, 200, 200, 200, 100]
@@ -85,10 +88,16 @@ class MainWindow(QMainWindow):
         item.setTextDirection(QtGui.QProgressBar.TopToBottom)
         self.ui.tableWidget_books.setCellWidget(row, MainWindow.COLUMN_PROGRESS, item)
 
-        # if freed:
-        #     self.list.SetItemBackgroundColour(row, MainWindow.BG_FREED)
-        # if done:
-        #     self.list.SetItemBackgroundColour(row, MainWindow.BG_DOWN)
+        if freed:
+            self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).setBackgroundColor(MainWindow.BG_FREED)
+            self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).setBackgroundColor(MainWindow.BG_FREED)
+            self.ui.tableWidget_books.item(row, MainWindow.COLUMN_AUTHOR).setBackgroundColor(MainWindow.BG_FREED)
+            self.ui.tableWidget_books.item(row, MainWindow.COLUMN_LINK).setBackgroundColor(MainWindow.BG_FREED)
+        if done:
+            self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).setBackgroundColor(MainWindow.BG_DOWN)
+            self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).setBackgroundColor(MainWindow.BG_DOWN)
+            self.ui.tableWidget_books.item(row, MainWindow.COLUMN_AUTHOR).setBackgroundColor(MainWindow.BG_DOWN)
+            self.ui.tableWidget_books.item(row, MainWindow.COLUMN_LINK).setBackgroundColor(MainWindow.BG_DOWN)
 
         self.adjustListWidth()
 
@@ -170,8 +179,8 @@ class MainWindow(QMainWindow):
 
     # self defined signal##############################################################################################
     def when_information(self, text, title=''):
-        self.emit(QtCore.SIGNAL("when_information(QString, QString)"), text, title)
         self.emit(QtCore.SIGNAL("when_status(QString)"), '%s --> %s' % (title, text))
+        self.emit(QtCore.SIGNAL("when_information(QString, QString)"), text, title)
 
     def when_itemProgress(self, row, prog):
         self.emit(QtCore.SIGNAL("when_item_progress(int, int)"), row, prog)
@@ -196,13 +205,28 @@ class MainWindow(QMainWindow):
             self.special = None
 
     def do_download_all(self):
-        self.downloadRow = 0
-        self.startDownload()
+        self.dlgs = []
+        for row in range(self.ui.tableWidget_books.rowCount()):
+            id    = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text()
+            title = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text()
+            dlg = DownloaderDlg(self, self.conf, title)
+            dlg.setId(id)
+            dlg.setName(id)
+            dlg.show()
+            dlg.resize(640, 200)
+            self.dlgs.append(dlg)
 
     def do_download_stop(self):
-        if self.downloader:
-            self.downloader.stop()
-            self.downloader = None
+        if self.dlgs:
+            for i, dlg in enumerate(self.dlgs):
+                if i < 5:
+                    x = 0
+                    y = 190 * i
+                else:
+                    x = 640
+                    y = 190 * (i - 5)
+                dlg.resize(640, 190)
+                dlg.move(x, y)
 
     def do_open_special_in_browser(self):
         self.duokan.openInNewTab(_fromQString(self.ui.lineEdit_specialUrl.text()))
@@ -215,9 +239,29 @@ class MainWindow(QMainWindow):
         self.duokan.cleanTmp()
         self.when_information( 'Finished', 'Clear tmp folder')
 
+    def do_merge_all(self):
+        for row in range(self.ui.tableWidget_books.rowCount()):
+            id = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
+            self.duokan.merge(id)
+        self.when_information('merge all finished')
+
+    def do_crop_all(self):
+        for row in range(self.ui.tableWidget_books.rowCount()):
+            id = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
+            self.duokan.crop(id)
+        self.when_information('crop all finished')
+
     def do_rename_all(self):
         self.duokan.renameAll()
         self.when_information('Finished', 'Rename All')
+
+    def do_done_all(self):
+        for row in range(self.ui.tableWidget_books.rowCount()):
+            id    = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
+            title = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text())
+            self.duokan.merge(id)
+            self.duokan.crop(id)
+            self.duokan.rename(id, title)
 
     def do_crop_book(self):
         file_wildcard = "Pdf files (*.pdf)"
@@ -265,8 +309,8 @@ class MainWindow(QMainWindow):
         '''download a book'''
         row = self.ui.tableWidget_books.currentRow()
         if row >=0 and row < self.ui.tableWidget_books.rowCount():
-            id    = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
-            title = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text())
+            id    = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text()
+            title = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text()
             dlg = DownloaderDlg(self, self.conf, title)
             dlg.setId(id)
             dlg.setName(id)
@@ -327,22 +371,22 @@ class DownloaderDlg(QDialog):
         self.when_title(tt)
 
     def start(self):
-            title = _fromQString(self.windowTitle())
-            bid   = _fromQString(self.ui.lineEdit_id.text())
-            name  = _fromQString(self.ui.lineEdit_name.text())
+        title = _fromQString(self.windowTitle())
+        bid   = _fromQString(self.ui.lineEdit_id.text())
+        name  = _fromQString(self.ui.lineEdit_name.text())
 
-            self.when_message('Title: %s' % title)
-            self.when_message('ID: %s' % bid)
-            self.when_message('Name: %s' % name)
-            self.when_message('downloading...')
-            self.when_message('---------')
+        self.when_message('Title: %s' % title)
+        self.when_message('ID: %s' % bid)
+        self.when_message('Name: %s' % name)
+        self.when_message('downloading...')
+        self.when_message('---------')
 
-            proxy = self.conf.getProxy()
-            self.downloader = Downloader(bid, name, proxy[0], proxy[1], proxy[2])
-            self.downloader.bind(Downloader.ON_STOP, self.cbStop)
-            self.downloader.bind(Downloader.EVT_LOG, self.cbLog)
-            self.downloader.bind(Downloader.EVT_PROG, self.cbProgress)
-            self.downloader.start()
+        proxy = self.conf.getProxy()
+        self.downloader = Downloader(bid, name, proxy[0], proxy[1], proxy[2])
+        self.downloader.bind(Downloader.ON_STOP, self.cbStop)
+        self.downloader.bind(Downloader.EVT_LOG, self.cbLog)
+        self.downloader.bind(Downloader.EVT_PROG, self.cbProgress)
+        self.downloader.start()
 
     def stop(self):
         if self.downloader:
@@ -380,15 +424,15 @@ class DownloaderDlg(QDialog):
         self.stop()
 
     def when_id(self, id):
-        self.emit(QtCore.SIGNAL('when_id(QString)'), _fromUtf8(id))
+        self.emit(QtCore.SIGNAL('when_id(QString)'), id)
     def when_name(self, name):
-        self.emit(QtCore.SIGNAL('when_name(QString)'), _fromUtf8(name))
+        self.emit(QtCore.SIGNAL('when_name(QString)'), name)
     def when_progress(self, prog):
         self.emit(QtCore.SIGNAL('when_progress(int)'), prog)
     def when_message(self, msgStr):
         self.emit(QtCore.SIGNAL('when_message(QString)'), _fromUtf8(msgStr))
     def when_title(self, title):
-        self.emit(QtCore.SIGNAL('when_title(QString)'), _fromUtf8(title))
+        self.emit(QtCore.SIGNAL('when_title(QString)'), title)
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)

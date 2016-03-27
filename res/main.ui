@@ -104,7 +104,7 @@
      <x>0</x>
      <y>0</y>
      <width>565</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -164,7 +164,11 @@
    <addaction name="separator"/>
    <addaction name="actionOpenBooksFolder"/>
    <addaction name="actionClean_Temp_Folder"/>
+   <addaction name="separator"/>
+   <addaction name="actionMerge_All"/>
+   <addaction name="actionCrop_All"/>
    <addaction name="actionRename_All"/>
+   <addaction name="actionDone_All"/>
    <addaction name="separator"/>
    <addaction name="actionCrop"/>
    <addaction name="actionMerge"/>
@@ -344,6 +348,33 @@
    </property>
    <property name="toolTip">
     <string>Stop download</string>
+   </property>
+  </action>
+  <action name="actionMerge_All">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/Merge_Horizontal_77.639344262295px_1190923_easyicon.net.png</normaloff>:/img/Merge_Horizontal_77.639344262295px_1190923_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Merge All</string>
+   </property>
+  </action>
+  <action name="actionCrop_All">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/crop_64px_1181784_easyicon.net.png</normaloff>:/img/crop_64px_1181784_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Crop All</string>
+   </property>
+  </action>
+  <action name="actionDone_All">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/done_all_64px_1181820_easyicon.net.png</normaloff>:/img/done_all_64px_1181820_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>All Done</string>
    </property>
   </action>
  </widget>
@@ -799,6 +830,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionMerge_All</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_merge_all()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCrop_All</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_crop_all()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDone_All</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_done_all()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>when_logging(QString)</signal>
@@ -829,5 +908,8 @@
   <slot>do_destroyed()</slot>
   <slot>do_update_stop()</slot>
   <slot>do_download_stop()</slot>
+  <slot>do_merge_all()</slot>
+  <slot>do_crop_all()</slot>
+  <slot>do_done_all()</slot>
  </slots>
 </ui>

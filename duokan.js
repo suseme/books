@@ -12,8 +12,8 @@ if (system.args.length < 3) {
 }
 
 var BOOK_URL = 'http://www.duokan.com/reader/www/app.html?id=' + system.args[1];
-
 var FOLDER = system.args[2];
+var USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36'
 
 //set view port size
 if (1 == system.args[3]) {
@@ -46,6 +46,9 @@ page.cookies = {
 	'userId':'40PDtzyqv1BOwvMQwJSbZ82_8Ya70mC-1RHd_zCWTma9aJvKnraK7se4Yn_5r956',
 	'user_id':'3924881'
 };
+
+// settings
+page.settings.userAgent = USER_AGENT;
 
 var _padding = function(number, length) {
     var str = '' + number;

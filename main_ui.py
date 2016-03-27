@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'res\main.ui'
 #
-# Created: Tue Mar 15 13:05:19 2016
+# Created: Fri Mar 18 19:56:24 2016
 #      by: PyQt4 UI code generator 4.11.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -75,7 +75,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.progressBar, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 565, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 565, 23))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
@@ -169,6 +169,21 @@ class Ui_MainWindow(object):
         icon12.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/stop_64px_1183450_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionDownloadStop.setIcon(icon12)
         self.actionDownloadStop.setObjectName(_fromUtf8("actionDownloadStop"))
+        self.actionMerge_All = QtGui.QAction(MainWindow)
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/Merge_Horizontal_77.639344262295px_1190923_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionMerge_All.setIcon(icon13)
+        self.actionMerge_All.setObjectName(_fromUtf8("actionMerge_All"))
+        self.actionCrop_All = QtGui.QAction(MainWindow)
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/crop_64px_1181784_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionCrop_All.setIcon(icon14)
+        self.actionCrop_All.setObjectName(_fromUtf8("actionCrop_All"))
+        self.actionDone_All = QtGui.QAction(MainWindow)
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/done_all_64px_1181820_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionDone_All.setIcon(icon15)
+        self.actionDone_All.setObjectName(_fromUtf8("actionDone_All"))
         self.menuFile.addAction(self.actionUpdate)
         self.menuFile.addAction(self.actionDownloadAll)
         self.menuFile.addSeparator()
@@ -199,7 +214,11 @@ class Ui_MainWindow(object):
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionOpenBooksFolder)
         self.toolBar.addAction(self.actionClean_Temp_Folder)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionMerge_All)
+        self.toolBar.addAction(self.actionCrop_All)
         self.toolBar.addAction(self.actionRename_All)
+        self.toolBar.addAction(self.actionDone_All)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionCrop)
         self.toolBar.addAction(self.actionMerge)
@@ -236,6 +255,9 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(MainWindow, QtCore.SIGNAL(_fromUtf8("destroyed()")), MainWindow.do_destroyed)
         QtCore.QObject.connect(self.actionUpdateStop, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_update_stop)
         QtCore.QObject.connect(self.actionDownloadStop, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_download_stop)
+        QtCore.QObject.connect(self.actionMerge_All, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_merge_all)
+        QtCore.QObject.connect(self.actionCrop_All, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_crop_all)
+        QtCore.QObject.connect(self.actionDone_All, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_done_all)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -282,6 +304,9 @@ class Ui_MainWindow(object):
         self.actionUpdateStop.setToolTip(_translate("MainWindow", "Stop update special", None))
         self.actionDownloadStop.setText(_translate("MainWindow", "DownloadStop", None))
         self.actionDownloadStop.setToolTip(_translate("MainWindow", "Stop download", None))
+        self.actionMerge_All.setText(_translate("MainWindow", "Merge All", None))
+        self.actionCrop_All.setText(_translate("MainWindow", "Crop All", None))
+        self.actionDone_All.setText(_translate("MainWindow", "All Done", None))
 
 import res_rc
 
