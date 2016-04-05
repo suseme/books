@@ -371,11 +371,11 @@ class DownloaderDlg(QDialog):
         self.when_title(tt)
 
     def start(self):
-        title = _fromQString(self.windowTitle())
+        # title = _fromQString(self.windowTitle())
         bid   = _fromQString(self.ui.lineEdit_id.text())
         name  = _fromQString(self.ui.lineEdit_name.text())
 
-        self.when_message('Title: %s' % title)
+        self.when_message('Title: %s' % self.windowTitle().toUtf8())
         self.when_message('ID: %s' % bid)
         self.when_message('Name: %s' % name)
         self.when_message('downloading...')

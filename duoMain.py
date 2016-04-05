@@ -136,7 +136,7 @@ class Downloader(Commading):
     def __init__(self, bid, name, proxyHost='', proxyAuthUser='', proxyAuthPswd=''):
         '''phantomjs --proxy=host --proxy-auth=username:password duokan.js %1 %ddd%/%2 4'''
         self.TAG = Downloader.__name__
-        cmd = ['phantomjs',]
+        cmd = ['plugin/phantomjs',]
         if len(proxyHost) > 0:
             cmd.append('--proxy=%s' % (proxyHost, ))
             if len(proxyAuthUser) > 0 and len(proxyAuthPswd):
