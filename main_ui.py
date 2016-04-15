@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'res\main.ui'
 #
-# Created: Fri Mar 18 19:56:24 2016
+# Created: Fri Apr 15 14:27:37 2016
 #      by: PyQt4 UI code generator 4.11.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -75,7 +75,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.progressBar, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 565, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 565, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
@@ -88,6 +88,9 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         MainWindow.setStatusBar(self.statusbar)
         self.toolBar = QtGui.QToolBar(MainWindow)
+        self.toolBar.setEnabled(True)
+        self.toolBar.setMovable(False)
+        self.toolBar.setFloatable(False)
         self.toolBar.setObjectName(_fromUtf8("toolBar"))
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
         self.actionUpdate = QtGui.QAction(MainWindow)
@@ -184,6 +187,8 @@ class Ui_MainWindow(object):
         icon15.addPixmap(QtGui.QPixmap(_fromUtf8(":/img/done_all_64px_1181820_easyicon.net.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionDone_All.setIcon(icon15)
         self.actionDone_All.setObjectName(_fromUtf8("actionDone_All"))
+        self.action_list_mark_download = QtGui.QAction(MainWindow)
+        self.action_list_mark_download.setObjectName(_fromUtf8("action_list_mark_download"))
         self.menuFile.addAction(self.actionUpdate)
         self.menuFile.addAction(self.actionDownloadAll)
         self.menuFile.addSeparator()
@@ -245,6 +250,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.action_list_merge, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_list_merge)
         QtCore.QObject.connect(self.action_list_crop, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_list_crop)
         QtCore.QObject.connect(self.action_list_rename, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_list_rename)
+        QtCore.QObject.connect(self.action_list_mark_download, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.do_list_mark_download)
         QtCore.QObject.connect(MainWindow, QtCore.SIGNAL(_fromUtf8("when_add_book(int)")), self.tableWidget_books.insertRow)
         QtCore.QObject.connect(MainWindow, QtCore.SIGNAL(_fromUtf8("when_del_book(int)")), self.tableWidget_books.removeRow)
         QtCore.QObject.connect(MainWindow, QtCore.SIGNAL(_fromUtf8("when_special_url(QString)")), self.lineEdit_specialUrl.setText)
@@ -307,6 +313,7 @@ class Ui_MainWindow(object):
         self.actionMerge_All.setText(_translate("MainWindow", "Merge All", None))
         self.actionCrop_All.setText(_translate("MainWindow", "Crop All", None))
         self.actionDone_All.setText(_translate("MainWindow", "All Done", None))
+        self.action_list_mark_download.setText(_translate("MainWindow", "Mark download", None))
 
 import res_rc
 

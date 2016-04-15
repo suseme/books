@@ -15,12 +15,6 @@ class Duokan:
 
         self.persist = Persist()
 
-    def rename(self, id, title):
-        path = os.path.join(os.path.curdir, 'books', 'new', id+'.pdf')
-        newPath = os.path.join(os.path.curdir, 'books', 'new', title+'.pdf')
-        if os.path.exists(path):
-            os.rename(path, newPath)
-
     def openInNewTab(self, url):
         '''open in browser with new tab'''
         if len(url) > 0:
@@ -52,13 +46,21 @@ class Duokan:
             except:
                 Log.e(self.TAG, 'delete [%s] failed...' % (src, ))
 
+    def rename(self, id, title = ''):
+        if len(title) < 1:
+            title = self.persist.getTitle(id)
+        path = os.path.join(os.path.curdir, 'books', 'new', id+'.pdf')
+        newPath = os.path.join(os.path.curdir, 'books', 'new', title+'.pdf')
+        if os.path.exists(path):
+            os.rename(path, newPath)
+
     def renameAll(self):
         path = os.path.join(os.path.curdir, 'books', 'new')
         for item in os.listdir(path):
             bid, extname = os.path.splitext(item)
             title = self.persist.getTitle(bid)
             if title:
-                newName =  '%s%s' % (title, extname)
+                newName = '%s%s' % (title, extname)
                 os.rename(os.path.join(path, item), os.path.join(path, newName))
                 Log.i(self.TAG, '%s -> %s' % (item, newName))
 
@@ -126,6 +128,9 @@ class Duokan:
 
     def isDownload(self, id):
         return self.persist.isDownload(id)
+
+    def setDownload(self, id):
+        self.persist.setDownload(id)
 
 class Downloader(Commading):
     EVT_LOG = 11

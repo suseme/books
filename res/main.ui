@@ -104,7 +104,7 @@
      <x>0</x>
      <y>0</y>
      <width>565</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -146,8 +146,17 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -375,6 +384,11 @@
    </property>
    <property name="text">
     <string>All Done</string>
+   </property>
+  </action>
+  <action name="action_list_mark_download">
+   <property name="text">
+    <string>Mark download</string>
    </property>
   </action>
  </widget>
@@ -671,6 +685,22 @@
    </hints>
   </connection>
   <connection>
+   <sender>action_list_mark_download</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_list_mark_download()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>MainWindow</sender>
    <signal>when_add_book(int)</signal>
    <receiver>tableWidget_books</receiver>
@@ -887,11 +917,16 @@
   <signal>when_del_book(int)</signal>
   <signal>when_progress(int)</signal>
   <slot>do_update()</slot>
+  <slot>do_update_stop()</slot>
   <slot>do_download_all()</slot>
+  <slot>do_download_stop()</slot>
   <slot>do_open_special_in_browser()</slot>
   <slot>do_open_books_folder()</slot>
   <slot>do_clean_tmp_folder()</slot>
+  <slot>do_merge_all()</slot>
+  <slot>do_crop_all()</slot>
   <slot>do_rename_all()</slot>
+  <slot>do_done_all()</slot>
   <slot>do_crop_book()</slot>
   <slot>do_merge_book()</slot>
   <slot>do_crop_4print()</slot>
@@ -904,12 +939,8 @@
   <slot>do_list_merge()</slot>
   <slot>do_list_crop()</slot>
   <slot>do_list_rename()</slot>
+  <slot>do_list_mark_download()</slot>
   <slot>do_list_dclick(int,int)</slot>
   <slot>do_destroyed()</slot>
-  <slot>do_update_stop()</slot>
-  <slot>do_download_stop()</slot>
-  <slot>do_merge_all()</slot>
-  <slot>do_crop_all()</slot>
-  <slot>do_done_all()</slot>
  </slots>
 </ui>

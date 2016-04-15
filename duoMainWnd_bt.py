@@ -57,6 +57,7 @@ class MainWindow(QMainWindow):
         self.ui.tableWidget_books.addAction(self.ui.action_list_merge)
         self.ui.tableWidget_books.addAction(self.ui.action_list_crop)
         self.ui.tableWidget_books.addAction(self.ui.action_list_rename)
+        self.ui.tableWidget_books.addAction(self.ui.action_list_mark_download)
 
     def bindSignal(self):
         QtCore.QObject.connect(self, QtCore.SIGNAL("when_information(QString, QString)"), self.do_message)
@@ -216,7 +217,6 @@ class MainWindow(QMainWindow):
             dlg.resize(640, 200)
             self.dlgs.append(dlg)
 
-    def do_download_stop(self):
         if self.dlgs:
             for i, dlg in enumerate(self.dlgs):
                 if i < 5:
@@ -227,6 +227,9 @@ class MainWindow(QMainWindow):
                     y = 190 * (i - 5)
                 dlg.resize(640, 190)
                 dlg.move(x, y)
+
+    def do_download_stop(self):
+        pass
 
     def do_open_special_in_browser(self):
         self.duokan.openInNewTab(_fromQString(self.ui.lineEdit_specialUrl.text()))
@@ -259,9 +262,10 @@ class MainWindow(QMainWindow):
         for row in range(self.ui.tableWidget_books.rowCount()):
             id    = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
             title = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text())
+            self.duokan.setDownload(id)
             self.duokan.merge(id)
             self.duokan.crop(id)
-            self.duokan.rename(id, title)
+            self.duokan.rename(id)
 
     def do_crop_book(self):
         file_wildcard = "Pdf files (*.pdf)"
@@ -347,6 +351,12 @@ class MainWindow(QMainWindow):
             title = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text())
             self.duokan.rename(id, title)
             self.when_information('rename finished')
+
+    def do_list_mark_download(self, row, col):
+        row = self.ui.tableWidget_books.currentRow()
+        if row != -1:
+            id = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
+            self.duokan.setDownload(id)
 
     def do_list_dclick(self, row, col):
         url = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_LINK).text())
