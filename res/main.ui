@@ -104,7 +104,7 @@
      <x>0</x>
      <y>0</y>
      <width>565</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -184,6 +184,7 @@
    <addaction name="separator"/>
    <addaction name="actionCrop_4print"/>
    <addaction name="actionCrop_4kindle"/>
+   <addaction name="actionCrop_4nook"/>
   </widget>
   <action name="actionUpdate">
    <property name="icon">
@@ -197,13 +198,16 @@
     <string>Update special list</string>
    </property>
   </action>
-  <action name="actionDownloadAll">
+  <action name="actionUpdateStop">
    <property name="icon">
     <iconset resource="res.qrc">
-     <normaloff>:/img/Download_73.119383825417px_1183408_easyicon.net.png</normaloff>:/img/Download_73.119383825417px_1183408_easyicon.net.png</iconset>
+     <normaloff>:/img/Stop_64px_1183587_easyicon.net.png</normaloff>:/img/Stop_64px_1183587_easyicon.net.png</iconset>
    </property>
    <property name="text">
-    <string>Download All</string>
+    <string>UpdateStop</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop update special</string>
    </property>
   </action>
   <action name="actionOpenInBrowser">
@@ -216,6 +220,27 @@
    </property>
    <property name="toolTip">
     <string>Open Special In Browser</string>
+   </property>
+  </action>
+  <action name="actionDownloadAll">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/Download_73.119383825417px_1183408_easyicon.net.png</normaloff>:/img/Download_73.119383825417px_1183408_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Download All</string>
+   </property>
+  </action>
+  <action name="actionDownloadStop">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/stop_64px_1183450_easyicon.net.png</normaloff>:/img/stop_64px_1183450_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>DownloadStop</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop download</string>
    </property>
   </action>
   <action name="actionOpenBooksFolder">
@@ -252,6 +277,24 @@
     <string>Clean Temp Folder</string>
    </property>
   </action>
+  <action name="actionMerge_All">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/Merge_Horizontal_77.639344262295px_1190923_easyicon.net.png</normaloff>:/img/Merge_Horizontal_77.639344262295px_1190923_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Merge All</string>
+   </property>
+  </action>
+  <action name="actionCrop_All">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/crop_64px_1181784_easyicon.net.png</normaloff>:/img/crop_64px_1181784_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Crop All</string>
+   </property>
+  </action>
   <action name="actionRename_All">
    <property name="icon">
     <iconset resource="res.qrc">
@@ -259,6 +302,15 @@
    </property>
    <property name="text">
     <string>Rename All</string>
+   </property>
+  </action>
+  <action name="actionDone_All">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/done_all_64px_1181820_easyicon.net.png</normaloff>:/img/done_all_64px_1181820_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>All Done</string>
    </property>
   </action>
   <action name="actionMerge">
@@ -300,6 +352,15 @@
     <string>Crop For Kindle</string>
    </property>
   </action>
+  <action name="actionCrop_4nook">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/nook_48px_1091342_easyicon.net.png</normaloff>:/img/nook_48px_1091342_easyicon.net.png</iconset>
+   </property>
+   <property name="text">
+    <string>Crop For Nook</string>
+   </property>
+  </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
@@ -333,57 +394,6 @@
   <action name="action_list_rename">
    <property name="text">
     <string>Rename</string>
-   </property>
-  </action>
-  <action name="actionUpdateStop">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/img/Stop_64px_1183587_easyicon.net.png</normaloff>:/img/Stop_64px_1183587_easyicon.net.png</iconset>
-   </property>
-   <property name="text">
-    <string>UpdateStop</string>
-   </property>
-   <property name="toolTip">
-    <string>Stop update special</string>
-   </property>
-  </action>
-  <action name="actionDownloadStop">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/img/stop_64px_1183450_easyicon.net.png</normaloff>:/img/stop_64px_1183450_easyicon.net.png</iconset>
-   </property>
-   <property name="text">
-    <string>DownloadStop</string>
-   </property>
-   <property name="toolTip">
-    <string>Stop download</string>
-   </property>
-  </action>
-  <action name="actionMerge_All">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/img/Merge_Horizontal_77.639344262295px_1190923_easyicon.net.png</normaloff>:/img/Merge_Horizontal_77.639344262295px_1190923_easyicon.net.png</iconset>
-   </property>
-   <property name="text">
-    <string>Merge All</string>
-   </property>
-  </action>
-  <action name="actionCrop_All">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/img/crop_64px_1181784_easyicon.net.png</normaloff>:/img/crop_64px_1181784_easyicon.net.png</iconset>
-   </property>
-   <property name="text">
-    <string>Crop All</string>
-   </property>
-  </action>
-  <action name="actionDone_All">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/img/done_all_64px_1181820_easyicon.net.png</normaloff>:/img/done_all_64px_1181820_easyicon.net.png</iconset>
-   </property>
-   <property name="text">
-    <string>All Done</string>
    </property>
   </action>
   <action name="action_list_mark_download">
@@ -561,6 +571,22 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>do_crop_4kindle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>282</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCrop_4nook</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>do_crop_4nook()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -931,6 +957,7 @@
   <slot>do_merge_book()</slot>
   <slot>do_crop_4print()</slot>
   <slot>do_crop_4kindle()</slot>
+  <slot>do_crop_4nook()</slot>
   <slot>on_power_off_setting(bool)</slot>
   <slot>on_book_dclick(int,int)</slot>
   <slot>do_list_view_in_browser()</slot>

@@ -179,9 +179,10 @@ class MainWindow(QMainWindow):
         self.emit(QtCore.SIGNAL("when_progress(int)"), prog)
 
     # self defined signal##############################################################################################
-    def when_information(self, text, title=''):
+    def when_information(self, text, title='', info=True):
         self.emit(QtCore.SIGNAL("when_status(QString)"), '%s --> %s' % (title, text))
-        self.emit(QtCore.SIGNAL("when_information(QString, QString)"), text, title)
+        if info:
+            self.emit(QtCore.SIGNAL("when_information(QString, QString)"), text, title)
 
     def when_itemProgress(self, row, prog):
         self.emit(QtCore.SIGNAL("when_item_progress(int, int)"), row, prog)
@@ -266,12 +267,13 @@ class MainWindow(QMainWindow):
             self.duokan.merge(id)
             self.duokan.crop(id)
             self.duokan.rename(id)
+            self.when_information('Finished!', 'Merge & Crop & Rename')
 
     def do_crop_book(self):
         file_wildcard = "Pdf files (*.pdf)"
         filePath = QFileDialog.getOpenFileName(self, 'Open file to crop', _fromUtf8(os.path.join(os.getcwd(), 'books')), _fromUtf8(file_wildcard))
         if filePath:
-            self.duokan.cropSingle(str(filePath.toUrf8()))
+            self.duokan.cropSingle(_fromQString(filePath))
             self.when_information( 'Finished!', 'Crop single')
 
     def do_merge_book(self):
@@ -285,15 +287,22 @@ class MainWindow(QMainWindow):
         file_wildcard = "Pdf files (*.pdf)"
         filePath = QFileDialog.getOpenFileName(self, 'Open file to crop for printing', _fromUtf8(os.path.join(os.getcwd(), 'books')), _fromUtf8(file_wildcard))
         if filePath:
-            self.duokan.crop4Print(str(filePath.toUrf8()))
+            self.duokan.crop4Print(_fromQString(filePath))
             self.when_information( 'Finished!', 'Crop for printing')
 
     def do_crop_4kindle(self):
         file_wildcard = "Pdf files (*.pdf)"
         filePath = QFileDialog.getOpenFileName(self, 'Open file to crop for printing', _fromUtf8(os.path.join(os.getcwd(), 'books')), _fromUtf8(file_wildcard))
         if filePath:
-            self.duokan.crop4Kindle(filePath)
+            self.duokan.crop4Kindle(_fromQString(filePath))
             self.when_information( 'Finished!', 'Crop for kindle')
+
+    def do_crop_4nook(self):
+        file_wildcard = "Pdf files (*.pdf)"
+        filePath = QFileDialog.getOpenFileName(self, 'Open file to crop for printing', _fromUtf8(os.path.join(os.getcwd(), 'books')), _fromUtf8(file_wildcard))
+        if filePath:
+            self.duokan.crop4Nook(_fromQString(filePath))
+            self.when_information('Finished!', 'Crop for nook')
 
     def on_power_off_setting(self, powerOff):
         self.powerOff = powerOff

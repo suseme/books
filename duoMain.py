@@ -123,6 +123,14 @@ class Duokan:
         # print destPath
         DuoPdf.crop(destPath, src, 50, 12, 50, 12)
 
+    @staticmethod
+    def crop4Nook(src):
+        '''crop blank edge'''
+        srcPath, ext = os.path.splitext(src)
+        destPath = srcPath + '_n' + ext
+        # print destPath
+        DuoPdf.crop(destPath, src, 56, 40, 56, 40)
+
     def addBook(self, id, title, author, link):
         return self.persist.addBook(id, title, author, link)
 
