@@ -262,12 +262,14 @@ class MainWindow(QMainWindow):
     def do_done_all(self):
         for row in range(self.ui.tableWidget_books.rowCount()):
             id    = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_ID).text())
-            title = _fromQString(self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text())
+            title = self.ui.tableWidget_books.item(row, MainWindow.COLUMN_TITLE).text()
+            self.when_information('Start', 'Merge & Crop & Rename [%s]' % title, False)
             self.duokan.setDownload(id)
             self.duokan.merge(id)
             self.duokan.crop(id)
             self.duokan.rename(id)
-            self.when_information('Finished!', 'Merge & Crop & Rename')
+            self.when_information('Finished!', 'Merge & Crop & Rename [%s]' % title, False)
+        self.when_information('Finished!', 'All Merge & Crop & Rename')
 
     def do_crop_book(self):
         file_wildcard = "Pdf files (*.pdf)"
