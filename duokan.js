@@ -115,11 +115,28 @@ var _nextPage = function() {
 
 var _setBgColor = function(page) {
     page.evaluate(function() {
-        $('.wrap').css("background-color","#FFFFFF");
-        $('.m-reader').css("background-color","#FFFFFF");
-        $('.rd_cnt').css("background-color","#FFFFFF");
-        $('.book_page_wrapper').css("background-color","#FFFFFF");
-        $('.j-md-book').css("background-color","#FFFFFF");
+        // remove background image, to reduce pdf file size
+                     jQuery('body').css('background-image', ');
+                   jQuery('.g-doc').css('background-image', '');
+                 jQuery('.loading').css('background-image', '');
+                  jQuery('.shadow').css('background-image', '');
+
+                     jQuery('body').css('background-color', '#FFFFFF');
+                   jQuery('.g-doc').css('background-color', '#FFFFFF');
+                 jQuery('.loading').css('background-color', '#FFFFFF');
+                  jQuery('.shadow').css('background-color', '#FFFFFF');
+
+//                     jQuery('body').css('background', '');
+//                   jQuery('.g-doc').css('background', '');
+//                 jQuery('.loading').css('background', '');
+//                  jQuery('.shadow').css('background', '');
+
+        // set background color to white
+                     $('.wrap').css("background-color", "#FFFFFF");
+                 $('.m-reader').css("background-color", "#FFFFFF");
+                   $('.rd_cnt').css("background-color", "#FFFFFF");
+        $('.book_page_wrapper').css("background-color", "#FFFFFF");
+                $('.j-md-book').css("background-color", "#FFFFFF");
     });
 }
 
@@ -139,7 +156,7 @@ var _setClipRect = function(page) {
 
 var _setPaperSize = function(page) {
     page.paperSize = {
-        width: '667px',
+        width:  '667px',
         height: '889px'
     };
 };
@@ -151,9 +168,9 @@ var _renderBook = function() {
         if (_isTextLoaded() && _isPicLoaded()) {
             _closeAd();
             _closeHelper();
+//            _setBgColor(page);
             var pageNum = _getPageNum();
             var fileName = FOLDER + '/' + pageNum + '.pdf';
-            _setBgColor(page);
             _setClipRect(page);
             page.render(fileName);
             //console.log(fileName);
@@ -201,11 +218,21 @@ var _objectSize = function(obj) {
 
 var _pics = {};
 
-var _refreshPage = function() {
+var _refreshBook = function() {
     page.open(BOOK_URL, function(){
         _pics = {};
     });
 };
+
+var _refreshPage = function() {
+    page.evaluate(function() {
+        if (0 != jQuery('.u-btn.u-btn-retry')) {
+            jQuery('.u-btn.u-btn-retry').click();
+            console.log('refresh');
+            _pics = {};
+        }
+    });
+}
 
 
 var _isPicLoaded = function(callback) {
@@ -238,12 +265,14 @@ var _isImg2Ignore = function(url) {
     var url5 = "http://www.duokan.com/reader/www/images/shadow1.png";
     var url6 = "http://hm.baidu.com/hm.gif";
 
-//    if (url.startWith(url1)) { return true; }
-//    if (url.startWith(url2)) { return true; }
-//    if (url.startWith(url3)) { return true; }
-//    if (url.startWith(url4)) { return true; }
-    if (url.startWith(url5)) { return true; }
-    if (url.startWith(url6)) { return true; }
+    console.log(url);
+
+//    if (url.startWith(url1)) { console.log('skip ' + url); return true; }
+//    if (url.startWith(url2)) { console.log('skip ' + url); return true; }
+//    if (url.startWith(url3)) { console.log('skip ' + url); return true; }
+//    if (url.startWith(url4)) { console.log('skip ' + url); return true; }
+    if (url.startWith(url5)) { console.log('skip ' + url); return true; }
+    if (url.startWith(url6)) { console.log('skip ' + url); return true; }
 
     return false;
 };
