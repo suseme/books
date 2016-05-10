@@ -248,19 +248,21 @@ String.prototype.startWith = function(s) {
  };
 
 var _isImg2Ignore = function(url) {
-    var url1 = "http://www.duokan.com/reader/www/images/beta.png";
-    var url2 = "http://www.duokan.com/reader/www/images/reader-loading.png";
-    var url3 = "http://www.duokan.com/reader/www/images/loading.gif";
-    var url4 = "http://www.duokan.com/reader/www/images/reader.png";
-    var url5 = "http://www.duokan.com/reader/www/images/shadow1.png";
-    var url6 = "http://hm.baidu.com/hm.gif";
+    var esc_urls = new Array(
+        "http://www.duokan.com/reader/www/images/beta.png",
+        "http://www.duokan.com/reader/www/images/reader-loading.png",
+        "http://www.duokan.com/reader/www/images/loading.gif",
+        "http://www.duokan.com/reader/www/images/reader.png",
+        "http://www.duokan.com/reader/www/images/shadow1.png",
+        "http://hm.baidu.com/hm.gif",
+        "http://hm.baidu.com/hm.js",
+    );
 
-    if (url.startWith(url1)) { return true; }
-    if (url.startWith(url2)) { return true; }
-    if (url.startWith(url3)) { return true; }
-    if (url.startWith(url4)) { return true; }
-    if (url.startWith(url5)) { return true; }
-    if (url.startWith(url6)) { return true; }
+    for (esc_url in esc_urls) {
+        if (url.startWith(esc_url)) {
+            return true;
+        }
+    }
 
     return false;
 };
@@ -293,7 +295,7 @@ page.onResourceReceived = function(response) {
 };
 
 page.onResourceError = function(resourceError) {
-  console.log('Unable to load resource (#' + resourceError.id + 'URL:' + resourceError.url + ')');
+  console.log('Unable to load resource (#' + resourceError.id + ', URL:' + resourceError.url + ')');
   console.log('Error code: ' + resourceError.errorCode + '. Description: ' + resourceError.errorString);
 };
 
