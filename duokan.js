@@ -116,20 +116,20 @@ var _nextPage = function() {
 var _setBgColor = function(page) {
     page.evaluate(function() {
         // remove background image, to reduce pdf file size
-                     jQuery('body').css('background-image', ');
-                   jQuery('.g-doc').css('background-image', '');
-                 jQuery('.loading').css('background-image', '');
-                  jQuery('.shadow').css('background-image', '');
+                     $('body').css('background-image', '');
+                   $('.g-doc').css('background-image', '');
+                 $('.loading').css('background-image', '');
+                  $('.shadow').css('background-image', '');
 
-                     jQuery('body').css('background-color', '#FFFFFF');
-                   jQuery('.g-doc').css('background-color', '#FFFFFF');
-                 jQuery('.loading').css('background-color', '#FFFFFF');
-                  jQuery('.shadow').css('background-color', '#FFFFFF');
+                     $('body').css('background-color', '#FFFFFF');
+                   $('.g-doc').css('background-color', '#FFFFFF');
+                 $('.loading').css('background-color', '#FFFFFF');
+                  $('.shadow').css('background-color', '#FFFFFF');
 
-//                     jQuery('body').css('background', '');
-//                   jQuery('.g-doc').css('background', '');
-//                 jQuery('.loading').css('background', '');
-//                  jQuery('.shadow').css('background', '');
+//                     $('body').css('background', '');
+//                   $('.g-doc').css('background', '');
+//                 $('.loading').css('background', '');
+//                  $('.shadow').css('background', '');
 
         // set background color to white
                      $('.wrap').css("background-color", "#FFFFFF");
@@ -168,9 +168,9 @@ var _renderBook = function() {
         if (_isTextLoaded() && _isPicLoaded()) {
             _closeAd();
             _closeHelper();
-//            _setBgColor(page);
             var pageNum = _getPageNum();
             var fileName = FOLDER + '/' + pageNum + '.pdf';
+            _setBgColor(page);
             _setClipRect(page);
             page.render(fileName);
             //console.log(fileName);
@@ -218,21 +218,11 @@ var _objectSize = function(obj) {
 
 var _pics = {};
 
-var _refreshBook = function() {
+var _refreshPage = function() {
     page.open(BOOK_URL, function(){
         _pics = {};
     });
 };
-
-var _refreshPage = function() {
-    page.evaluate(function() {
-        if (0 != jQuery('.u-btn.u-btn-retry')) {
-            jQuery('.u-btn.u-btn-retry').click();
-            console.log('refresh');
-            _pics = {};
-        }
-    });
-}
 
 
 var _isPicLoaded = function(callback) {
@@ -265,14 +255,12 @@ var _isImg2Ignore = function(url) {
     var url5 = "http://www.duokan.com/reader/www/images/shadow1.png";
     var url6 = "http://hm.baidu.com/hm.gif";
 
-    console.log(url);
-
-//    if (url.startWith(url1)) { console.log('skip ' + url); return true; }
-//    if (url.startWith(url2)) { console.log('skip ' + url); return true; }
-//    if (url.startWith(url3)) { console.log('skip ' + url); return true; }
-//    if (url.startWith(url4)) { console.log('skip ' + url); return true; }
-    if (url.startWith(url5)) { console.log('skip ' + url); return true; }
-    if (url.startWith(url6)) { console.log('skip ' + url); return true; }
+    if (url.startWith(url1)) { return true; }
+    if (url.startWith(url2)) { return true; }
+    if (url.startWith(url3)) { return true; }
+    if (url.startWith(url4)) { return true; }
+    if (url.startWith(url5)) { return true; }
+    if (url.startWith(url6)) { return true; }
 
     return false;
 };
@@ -302,6 +290,45 @@ page.onResourceReceived = function(response) {
             // console.log("- " + response.url)
         }
     }
+};
+
+page.onResourceError = function(resourceError) {
+  console.log('Unable to load resource (#' + resourceError.id + 'URL:' + resourceError.url + ')');
+  console.log('Error code: ' + resourceError.errorCode + '. Description: ' + resourceError.errorString);
+};
+
+page.onConsoleMessage = function(msg, lineNum, sourceId) {
+  console.log('CONSOLE: ' + msg + ' (from line #' + lineNum + ' in "' + sourceId + '")');
+};
+
+page.onError = function(msg, trace) {
+  var msgStack = ['ERROR: ' + msg];
+
+  if (trace && trace.length) {
+    msgStack.push('TRACE:');
+    trace.forEach(function(t) {
+      msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function +'")' : ''));
+    });
+  }
+
+  console.error(msgStack.join('\n'));
+};
+
+page.onInitialized = function() {
+  console.log('DOM content has loaded.');
+};
+
+page.onLoadFinished = function(status) {
+  console.log('Status: ' + status);
+  // Do other things here...
+};
+
+page.onLoadStarted = function() {
+  var currentUrl = page.evaluate(function() {
+    return window.location.href;
+  });
+  console.log('Current page ' + currentUrl + ' will gone...');
+  console.log('Now loading a new page...');
 };
 
 page.open(BOOK_URL, function(status) {
