@@ -12,6 +12,7 @@ class Duokan:
         Duokan.ensureDir(os.path.join(os.path.curdir, 'tmp'))
         Duokan.ensureDir(os.path.join(os.path.curdir, 'books'))
         Duokan.ensureDir(os.path.join(os.path.curdir, 'books', 'new'))
+        Duokan.ensureDir(os.path.join(os.path.curdir, 'cache'))
 
         self.persist = Persist()
 
@@ -154,6 +155,9 @@ class Downloader(Commading):
             cmd.append('--proxy=%s' % (proxyHost, ))
             if len(proxyAuthUser) > 0 and len(proxyAuthPswd):
                 cmd.append('--proxy-auth=%s:%s' % (proxyAuthUser, proxyAuthPswd))
+        cmd.append('--disk-cache=true')         # enable cache to speed up downloading
+        cmd.append('--disk-cache-path=cache')   # set cache path
+        # cmd.append('--debug=true')
         cmd.append('duokan.js')
         cmd.append(bid)
         cmd.append('tmp/%s' % (name, ))

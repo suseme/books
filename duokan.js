@@ -11,9 +11,9 @@ if (system.args.length < 3) {
     phantom.exit()
 }
 
-var BOOK_URL = 'http://www.duokan.com/reader/www/app.html?id=' + system.args[1];
-var FOLDER = system.args[2];
-var USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36'
+var BOOK_URL    = 'http://www.duokan.com/reader/www/app.html?id=' + system.args[1];
+var FOLDER      = system.args[2];
+var USER_AGENT  = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36'
 
 //set view port size
 if (1 == system.args[3]) {
