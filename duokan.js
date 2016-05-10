@@ -255,7 +255,7 @@ var _isImg2Ignore = function(url) {
         "http://www.duokan.com/reader/www/images/reader.png",
         "http://www.duokan.com/reader/www/images/shadow1.png",
         "http://hm.baidu.com/hm.gif",
-        "http://hm.baidu.com/hm.js",
+        "http://hm.baidu.com/hm.js"
     );
 
     for (esc_url in esc_urls) {
