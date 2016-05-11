@@ -5,6 +5,13 @@ import sys, os, traceback
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
 from pyvin.core import Log
 
+from pdfrw import PdfReader, PdfWriter
+
+if sys.platform == 'win32':
+    pass
+elif sys.platform == 'linux2':
+    pass
+
 class DuoPdf:
     def __init__(self, scr = None):
         self.TAG = DuoPdf.__name__
@@ -95,20 +102,18 @@ class DuoPdf:
             files = os.listdir(srcDir)
             if len(files) > 0:
                 merger = PdfFileMerger()
-                position = 0
-                for f in files:
+                for i,f in enumerate(files):
                     Log.i(DuoPdf.__name__, 'merge file [%s]' % (f, ))
                     filePath = os.path.join(srcDir, f)
                     if (os.path.isfile(filePath)):
                         try:
                             srcFileHdl = open(filePath, 'rb')
-                            merger.merge(position=position, fileobj=srcFileHdl)
+                            merger.merge(position=i, fileobj=srcFileHdl)
                         except:
                             Log.w(DuoPdf.__name__, 'merge [%s] failed' % (filePath))
                             traceback.print_exc()
                     else:
                         Log.i(DuoPdf.__name__, 'skip file [%s]' % (filePath,))
-                    position += 1
                 Log.i(DuoPdf.__name__, 'save to file [%s]...' % (dest, ))
                 destFileStream = file(dest, 'wb')
                 merger.write(destFileStream)
@@ -119,15 +124,95 @@ class DuoPdf:
         else:
             Log.w(DuoPdf.__name__, 'dir [%s] not exist.' % (srcDir,))
 
+    @staticmethod
+    def clean(srcDir):
+        if os.path.exists(srcDir) and os.path.isdir(srcDir):
+            files = os.listdir(srcDir)
+            if len(files) > 0:
+                for i,f in enumerate(files):
+                    filePath = os.path.join(srcDir, f)
+                    if (os.path.isfile(filePath)):
+                        try:
+                            DuoPdf.cleanPdf(filePath, filePath)
+                        except:
+                            Log.w(DuoPdf.__name__, 'clean [%s] failed' % (filePath))
+                            traceback.print_exc()
+                    else:
+                        Log.i(DuoPdf.__name__, 'skip file [%s]' % (filePath,))
+            else:
+                Log.w(DuoPdf.__name__, 'no file in [%s] to clean' % (srcDir))
+        else:
+            Log.w(DuoPdf.__name__, 'dir [%s] not exist.' % (srcDir,))
+
+
+    @staticmethod
+    def cleanPdf(srcPath, destPath=''):
+        if os.path.exists(srcPath):
+            x = PdfReader(srcPath)
+            for i, page in enumerate(x.pages):
+                print 'page %05d: ' % i,
+                xobjs = page.Resources.XObject
+                for okey in xobjs.keys():
+                    xobj = xobjs[okey]
+                    if DuoPdf.isDel(xobj):
+                        # xobj.pop('/SMask')
+                        xobjs.pop(okey)
+                        # print xobj
+                        # print xobj.SMask
+                        print '.',
+                    else:
+                        print '[%sx%s#%s]' % (xobj.Width, xobj.Height, xobj.Length),
+                print 'done'
+            PdfWriter().write(destPath, x)
+
+    @staticmethod
+    def isDel(xobj):
+        # quickly return
+        if not xobj:
+            return False
+        # print xobj.Filter
+        # print type(xobj.Filter)
+        # print xobj.ColorSpace
+        # print type(xobj.ColorSpace)
+        # print xobj.Type
+        # print type(xobj.Type)
+        # print xobj.Subtype
+        # print type(xobj.Subtype)
+        # if xobj.Filter != '/DCTDecode':             return False
+        # if xobj.ColorSpace != '/DeviceRGB':         return False
+        # if xobj.Type != '/XObject':                 return False
+        if xobj.BitsPerComponent != '8':             return False
+        # if xobj.Subtype != '/Image':                return False
+
+        # special xobject
+        # print xobj.Length
+        # print xobj.Height
+        # print xobj.Width
+        if xobj.Length == '1027' and xobj.Height == '160' and xobj.Width == '160':            return True
+        if xobj.Length == '1027' and xobj.Height == '160' and xobj.Width == '160':            return True
+        if xobj.Length == '667'  and xobj.Height == '160' and xobj.Width == '1'  :            return True
+        if xobj.Length == '1027' and xobj.Height == '160' and xobj.Width == '160':            return True
+        if xobj.Length == '667'  and xobj.Height == '1'   and xobj.Width == '160':            return True
+        if xobj.Length == '667'  and xobj.Height == '160' and xobj.Width == '1'  :            return True
+        if xobj.Length == '667'  and xobj.Height == '1'   and xobj.Width == '160':            return True
+        if xobj.Length == '1027' and xobj.Height == '160' and xobj.Width == '160':            return True
+
+        if xobj.Length == '7491' and xobj.Height == '188' and xobj.Width == '168':            return True
+        if xobj.Length == '1226' and xobj.Height == '16'  and xobj.Width == '45':             return True
+
+        # fall down
+        return False
+
 if __name__ == '__main__':
     src = sys.argv[1]
-
+    dest = sys.argv[2]
     # dest = src[:-4] + '.cropped.pdf'
     # duoPdf = DuoPdf(src)
     # duoPdf.cropWH(dest, 500, 666)
 
     # DuoPdf.duoMerge(src)
     # DuoPdf.duoCrop(src)
-    DuoPdf.duoCropForPrint(src)
+    # DuoPdf.duoCropForPrint(src)
+    DuoPdf.cleanPdf(src, dest)
 
 

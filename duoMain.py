@@ -80,6 +80,7 @@ class Duokan:
         '''merge pdf files in tmp/${id}, to books/new/${id}.pdf'''
         srcPath = os.path.join(os.path.curdir, 'tmp', id)
         destPath = os.path.join(os.path.curdir, 'books', 'new', id+'.pdf')
+        DuoPdf.clean(srcPath)   # clean pdf
         DuoPdf.merge(destPath, srcPath)
 
     @staticmethod
@@ -90,6 +91,7 @@ class Duokan:
         path = os.path.split(src)
         id = path[1]
         destPath = os.path.join(path[0], id+'.pdf')
+        DuoPdf.clean(src)
         DuoPdf.merge(destPath, src)
 
     @staticmethod
