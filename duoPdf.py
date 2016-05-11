@@ -148,6 +148,10 @@ class DuoPdf:
     @staticmethod
     def cleanPdf(srcPath, destPath=''):
         if os.path.exists(srcPath):
+            if len(destPath) < 1:
+                f, e = os.path.splitext(srcPath)
+                destPath = f+'.cln.pdf'
+
             x = PdfReader(srcPath)
             for i, page in enumerate(x.pages):
                 print 'page %05d: ' % i,
@@ -163,6 +167,7 @@ class DuoPdf:
                     else:
                         print '[%sx%s#%s]' % (xobj.Width, xobj.Height, xobj.Length),
                 print 'done'
+            print '[%s] -> [%s]' % (srcPath, destPath)
             PdfWriter().write(destPath, x)
 
     @staticmethod
@@ -203,9 +208,36 @@ class DuoPdf:
         # fall down
         return False
 
+    @staticmethod
+    def cleanAllInPath(srcDir):
+        if os.path.exists(srcDir) and os.path.isdir(srcDir):
+            files = os.listdir(srcDir)
+            num = len(files)
+            if num > 0:
+                for i, f in enumerate(files):
+                    print '%d/%d: %s' % (i, num, f)
+                    fileName, fileExt = os.path.splitext(f)
+                    srcPath = os.path.join(srcDir, f)
+                    destPath = os.path.join(srcDir, fileName+'.cln.pdf')
+                    if (os.path.isfile(srcPath)):
+                        try:
+                            DuoPdf.cleanPdf(srcPath, destPath)
+                            # print '%s -> ' % srcPath
+                            # print destPath
+                        except:
+                            Log.w(DuoPdf.__name__, 'clean [%s] failed' % (srcPath))
+                            traceback.print_exc()
+                    else:
+                        Log.i(DuoPdf.__name__, 'skip file [%s]' % (srcPath,))
+            else:
+                Log.w(DuoPdf.__name__, 'no file in [%s] to clean' % (srcDir))
+        else:
+            Log.w(DuoPdf.__name__, 'dir [%s] not exist.' % (srcDir,))
+
+
 if __name__ == '__main__':
     src = sys.argv[1]
-    dest = sys.argv[2]
+    # dest = sys.argv[2]
     # dest = src[:-4] + '.cropped.pdf'
     # duoPdf = DuoPdf(src)
     # duoPdf.cropWH(dest, 500, 666)
@@ -213,6 +245,7 @@ if __name__ == '__main__':
     # DuoPdf.duoMerge(src)
     # DuoPdf.duoCrop(src)
     # DuoPdf.duoCropForPrint(src)
-    DuoPdf.cleanPdf(src, dest)
+    # DuoPdf.cleanPdf(src)
+    DuoPdf.cleanAllInPath(src)
 
 
