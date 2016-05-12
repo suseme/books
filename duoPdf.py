@@ -208,31 +208,58 @@ class DuoPdf:
         # fall down
         return False
 
-    @staticmethod
-    def cleanAllInPath(srcDir):
+class ReduceSize():
+    def __init__(self):
+        pass
+
+    def cleanAllInPath(self, srcDir):
         if os.path.exists(srcDir) and os.path.isdir(srcDir):
             files = os.listdir(srcDir)
             num = len(files)
             if num > 0:
                 for i, f in enumerate(files):
                     print '%d/%d: %s' % (i, num, f)
-                    fileName, fileExt = os.path.splitext(f)
+                    fileName = self.getCleanedFileName(f)
                     srcPath = os.path.join(srcDir, f)
-                    destPath = os.path.join(srcDir, fileName+'.cln.pdf')
+                    destPath = os.path.join(srcDir, fileName)
                     if (os.path.isfile(srcPath)):
-                        try:
-                            DuoPdf.cleanPdf(srcPath, destPath)
-                            # print '%s -> ' % srcPath
-                            # print destPath
-                        except:
-                            Log.w(DuoPdf.__name__, 'clean [%s] failed' % (srcPath))
-                            traceback.print_exc()
+                        if self.isCleanedFile(srcPath):
+                            print 'skip [%s]' % srcPath
+                        elif self.hasCleaned(srcPath):
+                            print 'skip [%s]' % srcPath
+                        else:
+                            try:
+                                DuoPdf.cleanPdf(srcPath, destPath)
+                                # print '%s -> ' % srcPath
+                                # print destPath
+                            except:
+                                Log.w(DuoPdf.__name__, 'clean [%s] failed' % (srcPath))
+                                traceback.print_exc()
                     else:
                         Log.i(DuoPdf.__name__, 'skip file [%s]' % (srcPath,))
             else:
                 Log.w(DuoPdf.__name__, 'no file in [%s] to clean' % (srcDir))
         else:
             Log.w(DuoPdf.__name__, 'dir [%s] not exist.' % (srcDir,))
+
+    def isCleanedFile(self, file):
+        fileName, extName = os.path.splitext(file)
+        fileName, extName = os.path.splitext(fileName)
+        if len(extName) < 1:
+            return False
+        if extName == '.cln':
+            return True
+        return False
+
+    def hasCleaned(self, file):
+        fileName = self.getCleanedFileName(file)
+        if os.path.exists(fileName) and os.path.isfile(fileName):
+            return True
+        return False
+
+    def getCleanedFileName(self, file):
+        fileName, extName = os.path.splitext(file)
+        return '%s.cln.pdf' % fileName
 
 
 if __name__ == '__main__':
